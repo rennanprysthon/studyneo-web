@@ -1,6 +1,4 @@
-import React, {
-  createContext, useEffect, useState, useMemo,
-} from 'react';
+import React, { createContext, useEffect, useState } from 'react';
 import api from '../services/api';
 // import { Container } from './styles';
 interface Admin {
@@ -19,7 +17,6 @@ export const Auth = createContext({} as Admin);
 const AuthContext: React.FC = ({ children }) => {
   const [token, setToken] = useState('');
   const [refreshToken, setRefreshToken] = useState('');
-  const isLogged = useMemo(() => token.length > 0, [token]);
   const signIn = async (email: string, password: string) => {
     try {
       const response = await api.post<Response>('/admin/login', { email, password });
@@ -49,7 +46,7 @@ const AuthContext: React.FC = ({ children }) => {
   return (
     <Auth.Provider
       value={{
-        isLogged,
+        isLogged: token.length > 0,
         refresh_token: refreshToken,
         token,
         signIn,
