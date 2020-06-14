@@ -1,13 +1,15 @@
-import React, { FormEvent, useState } from 'react';
+import React, { FormEvent, useState, useContext } from 'react';
 
 // import { Container } from './styles';
+import { Auth } from '../../contexts/auth';
 
 const Login: React.FC = () => {
+  const { signIn } = useContext(Auth);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  function logar(e: FormEvent) {
+  async function logar(e: FormEvent) {
     e.preventDefault();
-    console.log('Submited');
+    await signIn(email, password);
   }
   return (
     <form onSubmit={logar}>
@@ -27,7 +29,7 @@ const Login: React.FC = () => {
         />
       </div>
       <div>
-        <input type="button" value="Entrar" />
+        <input type="submit" value="Entrar" />
       </div>
     </form>
   );
