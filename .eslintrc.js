@@ -23,6 +23,7 @@ module.exports = {
   },
   plugins: ['react', 'import', 'jsx-a11y'],
   rules: {
+    camelcase: 0,
     'react/jsx-filename-extension': [
       'error',
       {
