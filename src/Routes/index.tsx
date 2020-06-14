@@ -1,40 +1,12 @@
-import React, {
-  useState,
-  useCallback,
-} from 'react';
-import { api } from '../services/api';
+import React from 'react';
+import { BrowserRouter } from 'react-router-dom';
+// import AppRoutes from './app.routes';
+import AuthRoutes from './auth.routes';
 
-const Routes:React.FC = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const logar = useCallback(
-    async () => {
-      try {
-        const response = await api.post('/admin/login', {
-          email,
-          password,
-        });
-        console.log(response);
-      } catch (error) {
-        console.log(error);
-      }
-    }, [password, email],
-  );
-
-  return (
-    <form onSubmit={logar}>
-      <div>
-        <h1>Login</h1>
-      </div>
-      <div>
-        <input type="email" value={email} onChange={(ctx) => setEmail(ctx.target.value)} />
-        <input type="password" value={password} onChange={(ctx) => setPassword(ctx.target.value)} />
-      </div>
-      <div>
-        <input type="button" onClick={logar} value="Entrar" />
-      </div>
-    </form>
-  );
-};
+const Routes: React.FC = () => (
+  <BrowserRouter>
+    <AuthRoutes />
+  </BrowserRouter>
+);
 
 export default Routes;
