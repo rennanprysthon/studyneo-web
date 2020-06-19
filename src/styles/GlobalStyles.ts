@@ -1,0 +1,21 @@
+import { createGlobalStyle } from 'styled-components';
+
+export default createGlobalStyle`
+  @import url('https://fonts.googleapis.com/css2?family=Rubik:wght@300&display=swap');
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  html, body, #root {
+    height: 100%;
+  }
+  *, button, input {
+    border: 0;
+    font-family: 'Rubik', sans-serif;
+  }
+  :root {
+    --primary: #36393f;
+    --secondary: #2f3136;
+  }
+`;
