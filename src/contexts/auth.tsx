@@ -26,7 +26,8 @@ const AuthContext: React.FC = ({ children }) => {
       localStorage.setItem('@TOKEN', loggedToken);
       localStorage.setItem('@REFRESH_TOKEN', loggedRefreshToken);
     } catch (err) {
-      alert(err.response.data[0].message);
+      alert(err);
+      alert(err.response?.data[0]?.message);
     }
   };
 

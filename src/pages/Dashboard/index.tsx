@@ -1,16 +1,16 @@
-import React, { useContext } from 'react';
-// import { Container } from './styles';
-import { Auth } from '../../contexts/auth';
+import React from 'react';
 
-const Dashboard: React.FC = () => {
-  const { signOut } = useContext(Auth);
-  return (
-    <div>
-      <h1>Dashboard</h1>
-      <button type="button" onClick={() => signOut()}>Sign out</button>
-    </div>
+import { Container } from './styles';
+import TopBar from '../../components/TopBar/topbar';
+import MenuLateral from '../../components/MenuLateral';
 
-  );
-};
+const Dashboard: React.FC = () => (
+  <Container>
+    <MenuLateral />
+
+    <TopBar />
+  </Container>
+
+);
 
 export default Dashboard;
