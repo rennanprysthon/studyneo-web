@@ -1,14 +1,17 @@
 import React from 'react';
 
-import { Container } from './styles';
+import { Container, Content } from './styles';
 import TopBar from '../../components/TopBar/topbar';
 import MenuLateral from '../../components/MenuLateral';
 
-const Dashboard: React.FC = () => (
+const Dashboard: React.FC = ({ children }) => (
   <Container>
     <MenuLateral />
-
     <TopBar />
+    <Content>
+      {children}
+
+    </Content>
   </Container>
 
 );

@@ -1,12 +1,90 @@
-import React, { useState } from 'react';
+import React, {
+  useEffect, useContext,
+} from 'react';
 
-import { Container } from './styles';
+import { Link } from 'react-router-dom';
+import {
+  Container,
+  Header,
+  BookIcon,
+  AddIcon,
+  Title,
+  Content,
+  Table,
+  Tr,
+  Th,
+  Td,
+  Controller,
+  FowardIcon,
+  FowardBack,
+  Pagination,
+  PageNumber,
+  Divider,
+  TotalNumber,
+} from './styles';
+import { Questao } from '../QuestaoContext';
 
 const QuestaoList: React.FC = () => {
-  const [data, setData] = useState();
+  const {
+    feed, loadQuestions, page, last, prevPage, nextPage,
+  } = useContext(Questao);
+
+  useEffect(() => {
+    loadQuestions();
+  }, [loadQuestions]);
+
   return (
     <Container>
-      <h1>teste</h1>
+      <Header>
+        <Title>
+          <BookIcon />
+          <span>
+            Questões
+          </span>
+        </Title>
+        <Link to="/questoes/add">
+          <AddIcon />
+        </Link>
+      </Header>
+      <Content>
+        <Table>
+          <thead>
+            <Tr>
+              <Th>
+                num
+              </Th>
+              <Th>
+                enunciado
+              </Th>
+            </Tr>
+          </thead>
+          <tbody>
+            {feed?.map((item) => (
+              <Tr key={item.id}>
+                <Td>
+                  {item.id}
+                </Td>
+                <Td>
+                  {item.enunciado}
+                </Td>
+              </Tr>
+            ))}
+          </tbody>
+        </Table>
+      </Content>
+      <Controller>
+        <Pagination>
+          <PageNumber>
+            {page}
+          </PageNumber>
+          <Divider />
+          <TotalNumber>
+            {last}
+          </TotalNumber>
+        </Pagination>
+        <FowardBack onClick={prevPage} />
+        <FowardIcon onClick={nextPage} />
+      </Controller>
     </Container>
   );
 };
