@@ -10,9 +10,9 @@ export const Types = {
 const INITIAL_STATE:Area[] = [];
 
 export const Creators = {
-  request: () => async (disptach:Redux.Dispatch) => {
+  request: () => async (dispatch:Redux.Dispatch) => {
     const response = await Api.requestFilters();
-    disptach({ type: Types.REQUEST, response });
+    dispatch({ type: Types.REQUEST, response });
   },
 };
 
