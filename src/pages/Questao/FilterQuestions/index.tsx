@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { FiEdit } from 'react-icons/fi';
-import { Container, Select, Button } from './styles';
+
+import { Container, Select } from './styles';
 import { State } from '../../../types/globalstate';
 import { Matter } from '../../../types/filters';
 import { Creators as FilterActions } from '../../../redux/ducks/filter';
 import { Creators as SubjectActions } from '../../../redux/ducks/subject';
+import AddSubject from '../../../components/AddSubject';
 
 const FilterQuestions: React.FC = () => {
   const [matters, setMatters] = useState<Matter[]>([]);
@@ -51,9 +52,7 @@ const FilterQuestions: React.FC = () => {
           ))
         }
       </Select>
-      <Button>
-        <FiEdit />
-      </Button>
+      <AddSubject />
     </Container>
   );
 };
