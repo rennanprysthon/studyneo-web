@@ -64,7 +64,7 @@ const QuestaoContext: React.FC = ({ children }) => {
   }, [page, size]);
 
   useEffect(() => {
-    loadQuestions();
+    // loadQuestions();
   }, [feed, loadQuestions, page, size]);
 
   const nextPage = () => {
