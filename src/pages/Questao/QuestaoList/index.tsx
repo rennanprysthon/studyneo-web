@@ -23,6 +23,7 @@ import {
   TotalNumber,
 } from './styles';
 import { Questao } from '../QuestaoContext';
+import FilterQuestions from '../FilterQuestions';
 
 const QuestaoList: React.FC = () => {
   const {
@@ -35,6 +36,7 @@ const QuestaoList: React.FC = () => {
 
   return (
     <Container>
+      <FilterQuestions />
       <Header>
         <Title>
           <BookIcon />
@@ -51,10 +53,10 @@ const QuestaoList: React.FC = () => {
           <thead>
             <Tr>
               <Th>
-                num
+                #
               </Th>
               <Th>
-                enunciado
+                Enunciado
               </Th>
             </Tr>
           </thead>

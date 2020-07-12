@@ -1,20 +1,17 @@
 import api from '.';
-import { Data } from '../types/questions';
+import { Data, QuestionResponse } from '../types/questions';
 
-export async function requestQuestions(data:Data) {
+const requestQuestions = async (data:Data) => {
   try {
-    const response = await api.get('/questions', {
+    const response = await api.get<QuestionResponse>('/questions', {
       params: data,
     });
-    return response.data.data;
+    return response.data;
   } catch (err) {
     return [];
   }
-}
-interface Question{
-  enunciado: string;
-  subject_id: number
-}
-export async function createQuestion(data:Question) {
-  return {};
-}
+};
+const Api = {
+  requestQuestions,
+};
+export default Api;
