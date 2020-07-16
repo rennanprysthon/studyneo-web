@@ -38,6 +38,13 @@ const FilterQuestions: React.FC = () => {
     dispatch(FilterActions.select(Number(matter_id)));
     dispatch(SubjectActions.request(Number(matter_id)));
   }
+  function handleSubjectChange(event:React.FormEvent<HTMLSelectElement>) {
+    if (event.currentTarget.value === 'subject') {
+      return;
+    };
+    const subject_id = event.currentTarget.value;
+    dispatch(SubjectActions.select(Number(subject_id)));
+  }
   return (
     <Container>
       <Select onChange={handleAreaChange}>
@@ -62,8 +69,8 @@ const FilterQuestions: React.FC = () => {
       {
         displaySubject && (
           <>
-            <Select>
-              <option value="area">Assunto</option>
+            <Select onChange={handleSubjectChange}>
+              <option value="subject">Assunto</option>
               {
           subjects.map((subject) => (
             <option value={subject.id} key={subject.id}>{subject.title}</option>
