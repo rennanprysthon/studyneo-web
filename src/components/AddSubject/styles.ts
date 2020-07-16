@@ -48,3 +48,20 @@ export const Tr = styled.tr`
 export const Td = styled.td`
   padding: 10px 20px;
 `;
+
+export const Loader = styled.div`
+
+  width: 100%;
+  height: 50px;
+  background: rgb(170,170,170);
+  background: linear-gradient(102deg, rgba(170,170,170,1) 0%, rgba(255,255,255,1) 45%, rgba(170,170,170,1) 100%);
+  background-size: 600% 100%;
+  animation: gradient 2s linear infinite;
+  animation-direction: alternate;
+  @keyframes gradient {
+    0% {background-position: 0%}
+    100% {background-position: 100%}
+  }
+
+
+`;

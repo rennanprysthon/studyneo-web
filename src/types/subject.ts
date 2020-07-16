@@ -9,3 +9,15 @@ export interface Action{
   type:string,
   response: Subject[]
 }
+export interface SubjectData {
+  title: string,
+  matter_id:number
+}
+export interface CreateAction{
+  type:string,
+  response: Subject
+}
+export interface State{
+  loading: boolean,
+  subjects: Subject[]
+}

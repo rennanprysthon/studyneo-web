@@ -3,7 +3,7 @@ import * as Question from './questions';
 import * as Subject from './subject';
 
 export interface State{
-  filter: Filters.Area[];
+  filter: Filters.State;
   question: Question.QuestionResponse;
-  subject: Subject.Subject[]
+  subject: Subject.State
 }

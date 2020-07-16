@@ -1,29 +1,41 @@
 import React, { useEffect, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-
-import { Container, Select } from './styles';
-import { State } from '../../../types/globalstate';
-import { Matter } from '../../../types/filters';
+import { useDispatch, useSelector } from 'react-redux';
+import AddSubject from '../../../components/AddSubject';
 import { Creators as FilterActions } from '../../../redux/ducks/filter';
 import { Creators as SubjectActions } from '../../../redux/ducks/subject';
-import AddSubject from '../../../components/AddSubject';
+import { Matter } from '../../../types/filters';
+import { State } from '../../../types/globalstate';
+import { Container, Select } from './styles';
+
 
 const FilterQuestions: React.FC = () => {
   const [matters, setMatters] = useState<Matter[]>([]);
-  const areas = useSelector((state:State) => state.filter);
-  const subjects = useSelector((state:State) => state.subject);
+  const [displaySubject, setDisplaySubject] = useState(false);
+  const [displayMatter, setDisplayMatter] = useState(false);
+  const { areas } = useSelector((state:State) => state.filter);
+  const subjects = useSelector((state:State) => state.subject.subjects);
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(FilterActions.request());
   }, [dispatch]);
   function handleAreaChange(event: React.FormEvent<HTMLSelectElement>) {
-    if (event.currentTarget.value === 'area') { return; };
+    if (event.currentTarget.value === 'area') {
+      setDisplayMatter(false);
+      setDisplaySubject(false);
+      return;
+    };
+    setDisplayMatter(true);
     const aux = areas.filter((area) => area.id === Number(event.currentTarget.value))[0];
     setMatters(aux.matters);
   }
   function handleMatterChange(event:React.FormEvent<HTMLSelectElement>) {
-    if (event.currentTarget.value === 'matter') { return; };
+    if (event.currentTarget.value === 'matter') {
+      setDisplaySubject(false);
+      return;
+    };
+    setDisplaySubject(true);
     const matter_id = event.currentTarget.value;
+    dispatch(FilterActions.select(Number(matter_id)));
     dispatch(SubjectActions.request(Number(matter_id)));
   }
   return (
@@ -36,6 +48,7 @@ const FilterQuestions: React.FC = () => {
           ))
         }
       </Select>
+      {displayMatter && (
       <Select onChange={handleMatterChange}>
         <option value="matter">Matéria</option>
         {
@@ -44,15 +57,24 @@ const FilterQuestions: React.FC = () => {
           ))
         }
       </Select>
-      <Select>
-        <option value="area">Assunto</option>
-        {
+      )}
+
+      {
+        displaySubject && (
+          <>
+            <Select>
+              <option value="area">Assunto</option>
+              {
           subjects.map((subject) => (
             <option value={subject.id} key={subject.id}>{subject.title}</option>
           ))
         }
-      </Select>
-      <AddSubject />
+            </Select>
+            <AddSubject />
+          </>
+        )
+      }
+
     </Container>
   );
 };
