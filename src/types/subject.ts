@@ -19,5 +19,6 @@ export interface CreateAction{
 }
 export interface State{
   loading: boolean,
+  selected_subject_id:number
   subjects: Subject[]
 }
