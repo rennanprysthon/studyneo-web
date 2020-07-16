@@ -7,7 +7,13 @@ const TopBar: React.FC = () => {
   const { signOut } = useContext(Auth);
   return (
     <Container>
-      <ul />
+      <ul>
+        <li>
+          <div onClick={signOut}>
+            sair
+          </div>
+        </li>
+      </ul>
     </Container>
   );
 };
