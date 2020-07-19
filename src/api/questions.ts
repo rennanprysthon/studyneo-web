@@ -1,17 +1,24 @@
 import api from '.';
-import { Data, QuestionResponse } from '../types/questions';
+import { QuestionResponse } from '../types/questions';
 
-const requestQuestions = async (data:Data) => {
+const requestQuestions = async (page:number) => {
   try {
-    const response = await api.get<QuestionResponse>('/questions', {
-      params: data,
-    });
+    const response = await api.get<QuestionResponse>(`/questions?page=${page}`);
     return response.data;
   } catch (err) {
-    return [];
+    return {};
+  }
+};
+const listQuestionsPerSubject = async (subject_id:number, page:number) => {
+  try {
+    const response = await api.get<QuestionResponse>(`/questions/${subject_id}?page=${page}`);
+    return response.data;
+  } catch (err) {
+    return {};
   }
 };
 const Api = {
   requestQuestions,
+  listQuestionsPerSubject,
 };
 export default Api;

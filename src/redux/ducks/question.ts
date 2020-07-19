@@ -1,7 +1,7 @@
 import Redux from 'redux';
 import { createReducer } from 'reduxsauce';
 import {
-  Data, QuestionResponse, Action,
+  QuestionResponse, Action,
 } from '../../types/questions';
 import Api from '../../api/questions';
 
@@ -10,15 +10,19 @@ export const Types = {
 };
 
 export const Creators = {
-  request: (data:Data) => async (dispatch:Redux.Dispatch) => {
-    const response = await Api.requestQuestions(data);
+  request: (page:number) => async (dispatch:Redux.Dispatch) => {
+    const response = await Api.requestQuestions(page);
+    dispatch({ type: Types.REQUEST, response });
+  },
+  requestFilteredBySubject: (subject_id:number, page:number) => async (dispatch:Redux.Dispatch) => {
+    const response = await Api.listQuestionsPerSubject(subject_id, page);
     dispatch({ type: Types.REQUEST, response });
   },
 };
 
 const INITIAL_STATE:QuestionResponse = {
   page: 1,
-  total: 1,
+  total: 0,
   lastPage: 1,
   perPage: 10,
   data: [],
