@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import AddSubject from '../../../components/AddSubject';
 import { Creators as FilterActions } from '../../../redux/ducks/filter';
@@ -9,58 +9,50 @@ import { Container, Select } from './styles';
 
 
 const FilterQuestions: React.FC = () => {
-  const [matters, setMatters] = useState<Matter[]>([]);
-  const [displaySubject, setDisplaySubject] = useState(false);
-  const [displayMatter, setDisplayMatter] = useState(false);
-  const { areas } = useSelector((state:State) => state.filter);
+  const { areas, selected_area_id, selected_matter_id } = useSelector((state:State) => state.filter);
+  const displayMatter = useMemo(() => (selected_area_id !== 0), [selected_area_id]);
+  const matters = useMemo(() => {
+    if (selected_area_id === 0) return [];
+    const aux = areas.filter((area) => area.id === selected_area_id)[0];
+    return aux.matters;
+  }, [areas, selected_area_id]);
+  const displaySubject = useMemo(() => (selected_matter_id !== 0), [selected_matter_id]);
+
+  const { selected_subject_id } = useSelector((state:State) => state.subject);
   const subjects = useSelector((state:State) => state.subject.subjects);
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(FilterActions.request());
   }, [dispatch]);
   function handleAreaChange(event: React.FormEvent<HTMLSelectElement>) {
-    if (event.currentTarget.value === 'area') {
-      setDisplayMatter(false);
-      setDisplaySubject(false);
-      return;
-    };
-    setDisplayMatter(true);
-    const aux = areas.filter((area) => area.id === Number(event.currentTarget.value))[0];
-    setMatters(aux.matters);
+    const area_id = event.currentTarget.value;
+    dispatch(FilterActions.selectArea(Number(area_id)));
   }
   function handleMatterChange(event:React.FormEvent<HTMLSelectElement>) {
-    if (event.currentTarget.value === 'matter') {
-      setDisplaySubject(false);
-      return;
-    };
-    setDisplaySubject(true);
     const matter_id = event.currentTarget.value;
-    dispatch(FilterActions.select(Number(matter_id)));
+    dispatch(FilterActions.selectMatter(Number(matter_id)));
     dispatch(SubjectActions.request(Number(matter_id)));
   }
   function handleSubjectChange(event:React.FormEvent<HTMLSelectElement>) {
-    if (event.currentTarget.value === 'subject') {
-      return;
-    };
     const subject_id = event.currentTarget.value;
     dispatch(SubjectActions.select(Number(subject_id)));
   }
   return (
     <Container>
       <Select onChange={handleAreaChange}>
-        <option value="area">Área de conhecimento</option>
+        <option value="0" selected={selected_area_id === 0}>Área de conhecimento</option>
         {
           areas.map((area) => (
-            <option value={area.id} key={area.id}>{area.title}</option>
+            <option value={area.id} key={area.id} selected={selected_area_id === area.id}>{area.title}</option>
           ))
         }
       </Select>
       {displayMatter && (
       <Select onChange={handleMatterChange}>
-        <option value="matter">Matéria</option>
+        <option value="0" selected={selected_matter_id === 0}>Matéria</option>
         {
           matters.map((matter) => (
-            <option value={matter.id} key={matter.id}>{matter.title}</option>
+            <option value={matter.id} key={matter.id} selected={selected_matter_id === matter.id}>{matter.title}</option>
           ))
         }
       </Select>
@@ -70,10 +62,10 @@ const FilterQuestions: React.FC = () => {
         displaySubject && (
           <>
             <Select onChange={handleSubjectChange}>
-              <option value="subject">Assunto</option>
+              <option value="0" selected={selected_subject_id === 0}>Assunto</option>
               {
           subjects.map((subject) => (
-            <option value={subject.id} key={subject.id}>{subject.title}</option>
+            <option value={subject.id} key={subject.id} selected={selected_subject_id === subject.id}>{subject.title}</option>
           ))
         }
             </Select>

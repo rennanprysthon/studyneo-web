@@ -16,6 +16,7 @@ export interface Action{
 export interface State{
   areas: Area[]
   selected_matter_id: number
+  selected_area_id: number
 }
 export interface ActionMatter{
   type:string,
