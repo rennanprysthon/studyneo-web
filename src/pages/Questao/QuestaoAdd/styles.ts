@@ -13,9 +13,7 @@ export const Container = styled.div`
   }
 `;
 export const Content = styled.div`
-  width: 90%;
   display: flex;
-  max-width: 700px;
   padding: 30px;
 `;
 export const Form = styled.div`
@@ -33,9 +31,9 @@ export const Input = styled.input`
 export const TextArea = styled.textarea`
   background-color: #F0f0f0;
   padding: 20px;
-  min-height: 150px;
+  min-height: 70px;
   width: 100%;
-  resize: none;
+  min-width: 450px;
   border-radius: 8px;
   font-family: 'Rubik', sans-serif;
 `;
@@ -57,10 +55,10 @@ export const FieldSet = styled.div`
 `;
 export const Button = styled.button`
   padding: 10px;
-  width: 100%;
+  width: 50%;
   border-radius: 8px;
   color: #3d3d3d;
-  background: #FFC600;
+  background: var(--secondary);
   font-weight: bold;
   transition: all 200ms ease;
   display:flex;

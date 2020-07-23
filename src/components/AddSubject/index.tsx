@@ -4,7 +4,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Modal } from 'semantic-ui-react';
 import { Creators } from '../../redux/ducks/subject';
 import { State } from '../../types/globalstate';
-import { Button, Form, Input, Loader, Table, Td, Tr } from './styles';
+import {
+  Button, Form, Input, Loader, Table, Td, Tr,
+} from './styles';
 
 
 const AddSubject: React.FC = () => {
