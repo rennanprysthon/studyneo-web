@@ -32,7 +32,6 @@ const AddSupportText: React.FC = () => {
   };
   return (
     <Modal
-      size="tiny"
       trigger={(
         <Button>
           <FiAlignLeft size={17} />
@@ -62,8 +61,8 @@ const AddSupportText: React.FC = () => {
             {
               texts.map((text, index) => (
                 <Tr key={text.title}>
-                  <Td>{text.title}</Td>
-                  <Td>{`${text.content.substring(0, 100 - 3)}...`}</Td>
+                  <Td>{`${text.title.substring(0, 50 - 3)}...`}</Td>
+                  <Td>{`${text.content.substring(0, 50 - 3)}...`}</Td>
                   <Td>
                     <RoundedButton>
                       <FiEdit2 />

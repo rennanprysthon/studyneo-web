@@ -26,7 +26,7 @@ const QuestaoAdd: React.FC = () => {
     setTexts([...texts, text]);
   };
   const removeText = (id:number) => {
-    const dataFiltered = texts.splice(id, 1);
+    const dataFiltered = texts.filter((val:Text, index:number) => index !== id);
     setTexts(dataFiltered);
   };
   return (
