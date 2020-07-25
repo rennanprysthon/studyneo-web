@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { Select } from 'semantic-ui-react';
 import { useSelector } from 'react-redux';
 import { FiCamera, FiAlignLeft, FiSave } from 'react-icons/fi';
+import { useToasts } from 'react-toast-notifications';
 import {
   Container, Content, Form, FieldSet, Input, Label, Submit, TextArea, Button,
 } from './styles';
@@ -31,6 +32,7 @@ const QuestaoAdd: React.FC = () => {
     { key: 'd', value: 'd', text: 'D' },
     { key: 'e', value: 'e', text: 'E' },
   ];
+  const { addToast } = useToasts();
   const addNewText = (text:Text) => {
     setTexts([...texts, text]);
   };
@@ -102,14 +104,24 @@ const QuestaoAdd: React.FC = () => {
         break;
     }
   };
+  const resetForm = () => {
+    setEnunciado('');
+    setQuestion('');
+    setTexts([]);
+    setAlternativeA({ body: '', isCorrect: false });
+    setAlternativeB({ body: '', isCorrect: false });
+    setAlternativeC({ body: '', isCorrect: false });
+    setAlternativeD({ body: '', isCorrect: false });
+    setAlternativeE({ body: '', isCorrect: false });
+  };
   const validateForm = () => {
     if (enunciado.length === 0) {
-      alert('O Enunciado não deve estar vazio.');
+      addToast('O Enunciado não deve estar vazio.', { appearance: 'info', autoDismiss: true });
       return false;
     }
 
     if (question.length === 0) {
-      alert('A pergunta não deve estar vazia.');
+      addToast('A Pergunta não deve estar vazia.', { appearance: 'info', autoDismiss: true });
       return false;
     }
     const alternatives = [
@@ -120,16 +132,16 @@ const QuestaoAdd: React.FC = () => {
       alternativeE];
     const isAnyRightAlternative = alternatives.filter((alter) => alter.isCorrect === true);
     if (isAnyRightAlternative.length !== 1) {
-      alert('Selecione uma alternativa correta.');
+      addToast('Selecione a alternativa correta.', { appearance: 'warning', autoDismiss: true });
       return false;
     }
     const isAnyAlternativeEmpty = alternatives.filter((alter) => alter.body.length === 0);
     if (isAnyAlternativeEmpty.length > 0) {
-      alert('Preencha todas as Alternativas.');
+      addToast('Preencha todas as alternativas.', { appearance: 'warning', autoDismiss: true });
       return false;
     }
     if (subject_id === 0) {
-      alert('Selecione a Matéria que este problema corresponde.');
+      addToast('Selecione o assunto referente à questão.', { appearance: 'warning', autoDismiss: true });
       return false;
     }
     return true;
@@ -140,6 +152,7 @@ const QuestaoAdd: React.FC = () => {
     if (!validateForm()) {
       return;
     }
+
 
     const alternatives = [
       alternativeA,
@@ -154,10 +167,12 @@ const QuestaoAdd: React.FC = () => {
       subject_id,
       texts,
     };
-    console.log(data);
+    resetForm();
+    addToast('Questão adicionada com sucesso!', { appearance: 'success', autoDismiss: true });
   };
   return (
     <Container>
+
       <SupportTextContext.Provider value={{ addNewText, texts, removeText }}>
         <Content>
           <Form onSubmit={onSubmitForm}>
@@ -215,6 +230,7 @@ const QuestaoAdd: React.FC = () => {
           </Form>
         </Content>
       </SupportTextContext.Provider>
+
     </Container>
   );
 };
