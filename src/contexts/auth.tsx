@@ -1,4 +1,8 @@
-import React, { createContext, useEffect, useState } from 'react';
+import React, {
+  createContext, useEffect, useState, useCallback,
+} from 'react';
+import { useToasts } from 'react-toast-notifications';
+import { useHistory } from 'react-router-dom';
 import api from '../services/api';
 // import { Container } from './styles';
 interface Admin {
@@ -13,11 +17,16 @@ interface Response{
   refreshToken:string
 }
 export const Auth = createContext({} as Admin);
-
 const AuthContext: React.FC = ({ children }) => {
+  const { addToast } = useToasts();
   const [token, setToken] = useState('');
   const [refreshToken, setRefreshToken] = useState('');
+
   const signIn = async (email: string, password: string) => {
+    if (email.length === 0 || password.length === 0) {
+      addToast('Preencha os campos de E-Mail e Senha.', { appearance: 'warning', autoDismiss: true });
+      return;
+    }
     try {
       const response = await api.post<Response>('/admin/login', { email, password });
       const { token: loggedToken, refreshToken: loggedRefreshToken } = response.data;
@@ -26,16 +35,19 @@ const AuthContext: React.FC = ({ children }) => {
       localStorage.setItem('@TOKEN', loggedToken);
       localStorage.setItem('@REFRESH_TOKEN', loggedRefreshToken);
     } catch (err) {
-      alert(err);
-      alert(err.response?.data[0]?.message);
+      addToast('E-Mail ou senha inválidos, tente novamente.', { appearance: 'error', autoDismiss: true });
     }
   };
+  const history = useHistory();
+  const signOut = useCallback(
+    async () => {
+      await localStorage.clear();
+      setToken('');
+      setRefreshToken('');
+      // history.push('/');
+    }, [],
+  );
 
-  const signOut = async () => {
-    await localStorage.clear();
-    setToken('');
-    setRefreshToken('');
-  };
   useEffect(() => {
     const loadedToken = localStorage.getItem('@TOKEN');
     const loadedRefreshToken = localStorage.getItem('@REFRESH_TOKEN');

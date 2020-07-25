@@ -22,7 +22,7 @@ const AddSubject: React.FC = () => {
     dispatch(Creators.remove(subject_id));
   };
   return (
-    <Modal size="tiny" trigger={<Button><FiEdit /></Button>}>
+    <Modal size="tiny" trigger={<Button type="button"><FiEdit /></Button>}>
       <Modal.Header>Adicionar Assunto</Modal.Header>
       <Modal.Content>
         <Modal.Description>

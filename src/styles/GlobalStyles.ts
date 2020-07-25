@@ -34,6 +34,7 @@ export default createGlobalStyle`
     --hot-pink: #bb16a3;
     --green: #00bf6f;
     --blue: #00313D;
+    --primaryDark: #00718d;
     --grey: #555;
   }
 `;
