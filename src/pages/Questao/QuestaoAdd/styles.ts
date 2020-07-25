@@ -16,7 +16,7 @@ export const Content = styled.div`
   display: flex;
   padding: 30px;
 `;
-export const Form = styled.div`
+export const Form = styled.form`
   display: flex;
   flex-direction: column;
   width: 100%;

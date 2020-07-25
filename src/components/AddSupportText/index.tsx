@@ -21,7 +21,7 @@ const AddSupportText: React.FC = () => {
   const handleOnTextareaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setContent(e.target.value);
   };
-  const onSubmitForm = (e:React.FormEvent<HTMLFormElement>) => {
+  const onSubmitForm = (e:React.FormEvent<HTMLButtonElement>) => {
     e.preventDefault();
     addNewText({
       title,
@@ -33,7 +33,7 @@ const AddSupportText: React.FC = () => {
   return (
     <Modal
       trigger={(
-        <Button>
+        <Button type="button">
           <FiAlignLeft size={17} />
           Adicionar Texto de apoio
         </Button>
@@ -42,10 +42,10 @@ const AddSupportText: React.FC = () => {
       <Modal.Header>Adicionar Texto de Apoio</Modal.Header>
 
       <Modal.Content>
-        <Form onSubmit={onSubmitForm}>
+        <Form>
           <Input placeholder="Título" value={title} onChange={handleOnInputChange} />
           <TextArea onChange={handleOnTextareaChange} value={content} placeholder="Conteúdo" />
-          <Button type="submit">
+          <Button type="button" onClick={onSubmitForm}>
             <FiSave size={17} />
             Salvar Texto
           </Button>
