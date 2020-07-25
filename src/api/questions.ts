@@ -33,9 +33,26 @@ const createQuestion = async (data:Data) => {
     return {};
   }
 };
+
+const removeQuestion = async (id:number) => {
+  try {
+    const response = await api.delete(`/questions/${id}`, {
+      headers: {
+        Authorization: `Bearer ${Storage.getUserToken()}`,
+        refresh_token: Storage.getUserRefreshToken(),
+      },
+    });
+    Storage.setUserToken(response.headers.token);
+    Storage.setUserRefreshToken(response.headers.refresh_token);
+    return true;
+  } catch (err) {
+    return false;
+  }
+};
 const Api = {
   requestQuestions,
   listQuestionsPerSubject,
   createQuestion,
+  removeQuestion,
 };
 export default Api;

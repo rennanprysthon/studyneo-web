@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { Select } from 'semantic-ui-react';
+import { Select, DropdownProps } from 'semantic-ui-react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   FiCamera, FiAlignLeft, FiSave, FiArrowLeft,
@@ -19,25 +19,34 @@ import AddSupportText from '../../../components/AddSupportText';
 
 import SupportTextContext, { Text } from '../../../contexts/SupportText';
 
+interface SelectAlternative {
+  key: string
+  value: number
+  text: string
+}
 const QuestaoAdd: React.FC = () => {
   const history = useHistory();
   const [enunciado, setEnunciado] = useState('');
   const [question, setQuestion] = useState('');
   const [texts, setTexts] = useState<Text[]>([] as Text[]);
-  const [alternativeA, setAlternativeA] = useState<Alternative>({ body: '', isCorrect: false });
-  const [alternativeB, setAlternativeB] = useState<Alternative>({ body: '', isCorrect: false });
-  const [alternativeC, setAlternativeC] = useState<Alternative>({ body: '', isCorrect: false });
-  const [alternativeD, setAlternativeD] = useState<Alternative>({ body: '', isCorrect: false });
-  const [alternativeE, setAlternativeE] = useState<Alternative>({ body: '', isCorrect: false });
+
+  const auxResetAlternatives = [
+    { body: '', isCorrect: false },
+    { body: '', isCorrect: false },
+    { body: '', isCorrect: false },
+    { body: '', isCorrect: false },
+    { body: '', isCorrect: false }];
+  const [alternatives, setAlternatives] = useState<Alternative[]>(auxResetAlternatives);
   const subject_id = useSelector((state:State) => state.subject.selected_subject_id);
   const dispatch = useDispatch();
   const selectAlternatives = [
-    { key: 'a', value: 'a', text: 'A' },
-    { key: 'b', value: 'b', text: 'B' },
-    { key: 'c', value: 'c', text: 'C' },
-    { key: 'd', value: 'd', text: 'D' },
-    { key: 'e', value: 'e', text: 'E' },
+    { key: 'a', value: 0, text: 'A' },
+    { key: 'b', value: 1, text: 'B' },
+    { key: 'c', value: 2, text: 'C' },
+    { key: 'd', value: 3, text: 'D' },
+    { key: 'e', value: 4, text: 'E' },
   ];
+
   const { addToast } = useToasts();
   const addNewText = (text:Text) => {
     setTexts([...texts, text]);
@@ -55,70 +64,26 @@ const QuestaoAdd: React.FC = () => {
   const handleOnChangeAlternative = (e: React.ChangeEvent<HTMLInputElement>) => {
     const element = e.target.name;
     const body = e.target.value;
-    let aux;
-    switch (element) {
-      case 'a':
-        aux = alternativeA;
-        setAlternativeA({ ...aux, body });
-        break;
-      case 'b':
-        aux = alternativeB;
-        setAlternativeB({ ...aux, body });
-        break;
-      case 'c':
-        aux = alternativeC;
-        setAlternativeC({ ...aux, body });
-        break;
-      case 'd':
-        aux = alternativeD;
-        setAlternativeD({ ...aux, body });
-        break;
-      case 'e':
-        aux = alternativeE;
-        setAlternativeE({ ...aux, body });
-        break;
-      default:
-        break;
-    }
+    const newAlternative = [...alternatives];
+    newAlternative[Number(element)].body = body;
+    setAlternatives(newAlternative);
   };
-  const handleOnChangeRightAlternative = (event: React.SyntheticEvent<HTMLElement>) => {
-    const auxiliar = event.currentTarget.innerHTML;
-    const key = auxiliar.substring((auxiliar.indexOf('>') + 1), auxiliar.lastIndexOf('<')).toLowerCase();
-    let aux;
-    switch (key) {
-      case 'a':
-        aux = alternativeA;
-        setAlternativeA({ ...aux, isCorrect: true });
-        break;
-      case 'b':
-        aux = alternativeB;
-        setAlternativeB({ ...aux, isCorrect: true });
-        break;
-      case 'c':
-        aux = alternativeC;
-        setAlternativeC({ ...aux, isCorrect: true });
-        break;
-      case 'd':
-        aux = alternativeD;
-        setAlternativeD({ ...aux, isCorrect: true });
-        break;
-      case 'e':
-        aux = alternativeE;
-        setAlternativeE({ ...aux, isCorrect: true });
-        break;
-      default:
-        break;
-    }
+  const handleOnChangeRightAlternative = (event: React.SyntheticEvent<HTMLElement, Event>, selectDataset: DropdownProps) => {
+    const newRightAlternative = alternatives;
+    newRightAlternative.forEach((alternative, index) => {
+      if (index === selectDataset.value) {
+        alternative.isCorrect = true;
+      } else {
+        alternative.isCorrect = false;
+      }
+    });
+    setAlternatives(newRightAlternative);
   };
   const resetForm = () => {
     setEnunciado('');
     setQuestion('');
     setTexts([]);
-    setAlternativeA({ body: '', isCorrect: false });
-    setAlternativeB({ body: '', isCorrect: false });
-    setAlternativeC({ body: '', isCorrect: false });
-    setAlternativeD({ body: '', isCorrect: false });
-    setAlternativeE({ body: '', isCorrect: false });
+    setAlternatives(auxResetAlternatives);
   };
   const validateForm = () => {
     if (enunciado.length === 0) {
@@ -130,12 +95,7 @@ const QuestaoAdd: React.FC = () => {
       addToast('A Pergunta não deve estar vazia.', { appearance: 'info', autoDismiss: true });
       return false;
     }
-    const alternatives = [
-      alternativeA,
-      alternativeB,
-      alternativeC,
-      alternativeD,
-      alternativeE];
+
     const isAnyRightAlternative = alternatives.filter((alter) => alter.isCorrect === true);
     if (isAnyRightAlternative.length !== 1) {
       addToast('Selecione a alternativa correta.', { appearance: 'warning', autoDismiss: true });
@@ -159,13 +119,6 @@ const QuestaoAdd: React.FC = () => {
       return;
     }
 
-
-    const alternatives = [
-      alternativeA,
-      alternativeB,
-      alternativeC,
-      alternativeD,
-      alternativeE];
     const data = {
       enunciado,
       question,
@@ -202,31 +155,31 @@ const QuestaoAdd: React.FC = () => {
               <Label>
                 A
               </Label>
-              <Input name="a" onChange={handleOnChangeAlternative} value={alternativeA.body} />
+              <Input name="0" onChange={handleOnChangeAlternative} value={alternatives[0].body} />
             </FieldSet>
             <FieldSet>
               <Label>
                 B
               </Label>
-              <Input name="b" onChange={handleOnChangeAlternative} value={alternativeB.body} />
+              <Input name="1" onChange={handleOnChangeAlternative} value={alternatives[1].body} />
             </FieldSet>
             <FieldSet>
               <Label>
                 C
               </Label>
-              <Input name="c" onChange={handleOnChangeAlternative} value={alternativeC.body} />
+              <Input name="2" onChange={handleOnChangeAlternative} value={alternatives[2].body} />
             </FieldSet>
             <FieldSet>
               <Label>
                 D
               </Label>
-              <Input name="d" onChange={handleOnChangeAlternative} value={alternativeD.body} />
+              <Input name="3" onChange={handleOnChangeAlternative} value={alternatives[3].body} />
             </FieldSet>
             <FieldSet>
               <Label>
                 E
               </Label>
-              <Input name="e" onChange={handleOnChangeAlternative} value={alternativeE.body} />
+              <Input name="4" onChange={handleOnChangeAlternative} value={alternatives[4].body} />
             </FieldSet>
             <Select options={selectAlternatives} placeholder="Selecione a alternativa correta" onChange={handleOnChangeRightAlternative} />
             <FilterQuestions />

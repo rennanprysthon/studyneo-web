@@ -2,6 +2,8 @@ import React, { useEffect, useCallback } from 'react';
 
 import { Table, Pagination, Button as AddButton } from 'semantic-ui-react';
 import { FiTrash, FiEdit2, FiPlus } from 'react-icons/fi';
+import { useToasts } from 'react-toast-notifications';
+
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { Container, Button, ButtonFrame } from './styles';
@@ -19,6 +21,11 @@ const QuestaoList: React.FC = () => {
   }, [dispatch, subject_id, page]);
   const navigate = () => {
     history.push('/questoes/add');
+  };
+  const { addToast } = useToasts();
+  const removeQuestion = (id:number) => {
+    dispatch(Creators.remove(id));
+    addToast('Questão removida com sucesso.', { appearance: 'success', autoDismiss: true });
   };
   useEffect(() => {
     dispatch(Creators.request(page));
@@ -62,8 +69,8 @@ const QuestaoList: React.FC = () => {
               <Table.Cell>{Intl.DateTimeFormat('pt-BR').format(Date.parse(question.created_at))}</Table.Cell>
               <Table.Cell>{Intl.DateTimeFormat('pt-BR').format(Date.parse(question.updated_at))}</Table.Cell>
               <Table.Cell>
-                <Button><FiEdit2 /></Button>
-                <Button><FiTrash /></Button>
+                <Button type="button"><FiEdit2 /></Button>
+                <Button type="button" onClick={() => removeQuestion(question.id)}><FiTrash /></Button>
               </Table.Cell>
             </Table.Row>
           ))}
