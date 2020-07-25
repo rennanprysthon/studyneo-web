@@ -3,10 +3,9 @@ import React, { useState } from 'react';
 import { Select, DropdownProps } from 'semantic-ui-react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
-  FiCamera, FiAlignLeft, FiSave, FiArrowLeft,
+  FiCamera, FiSave,
 } from 'react-icons/fi';
 import { useToasts } from 'react-toast-notifications';
-import { useHistory } from 'react-router-dom';
 import { Creators } from '../../../redux/ducks/question';
 import {
   Container, Content, Form, FieldSet, Input, Label, Submit, TextArea, Button,
@@ -25,7 +24,6 @@ interface SelectAlternative {
   text: string
 }
 const QuestaoAdd: React.FC = () => {
-  const history = useHistory();
   const [enunciado, setEnunciado] = useState('');
   const [question, setQuestion] = useState('');
   const [texts, setTexts] = useState<Text[]>([] as Text[]);

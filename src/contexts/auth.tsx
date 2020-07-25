@@ -2,7 +2,6 @@ import React, {
   createContext, useEffect, useState, useCallback,
 } from 'react';
 import { useToasts } from 'react-toast-notifications';
-import { useHistory } from 'react-router-dom';
 import api from '../services/api';
 // import { Container } from './styles';
 interface Admin {
@@ -38,13 +37,12 @@ const AuthContext: React.FC = ({ children }) => {
       addToast('E-Mail ou senha inválidos, tente novamente.', { appearance: 'error', autoDismiss: true });
     }
   };
-  const history = useHistory();
+
   const signOut = useCallback(
     async () => {
       await localStorage.clear();
       setToken('');
       setRefreshToken('');
-      // history.push('/');
     }, [],
   );
 

@@ -2,7 +2,14 @@ import api from '.';
 import Storage from '../storage/auth';
 
 const request = async (matter_id:number) => {
-  const response = await api.get(`/subjects/${matter_id}`);
+  const response = await api.get(`/subjects/${matter_id}`, {
+    headers: {
+      Authorization: `Bearer ${Storage.getUserToken()}`,
+      refresh_token: Storage.getUserRefreshToken(),
+    },
+  });
+  Storage.setUserToken(response.headers.token);
+  Storage.setUserRefreshToken(response.headers.refresh_token);
   return response.data;
 };
 

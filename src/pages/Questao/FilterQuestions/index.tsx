@@ -1,9 +1,8 @@
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import AddSubject from '../../../components/AddSubject';
 import { Creators as FilterActions } from '../../../redux/ducks/filter';
 import { Creators as SubjectActions } from '../../../redux/ducks/subject';
-import { Matter } from '../../../types/filters';
 import { State } from '../../../types/globalstate';
 import { Container, Select } from './styles';
 
