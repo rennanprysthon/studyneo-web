@@ -26,7 +26,7 @@ export const Creators = {
   },
   remove: (id:number) => async (dispatch: Redux.Dispatch) => {
     await Api.removeQuestion(id);
-    dispatch({ type: Types.CREATE, response: id });
+    dispatch({ type: Types.REMOVE, response: id });
   },
 };
 
@@ -44,10 +44,10 @@ const create = (state = INITIAL_STATE, action: CreateAction) => ({
   data: [...state.data, action.response],
 });
 const remove = (state = INITIAL_STATE, action:{type:string, response:number}) => {
-  const filteredData = state.data.filter((question) => question.id !== action.response);
+  const filtered = state.data.filter((question) => question.id !== action.response);
   return {
     ...state,
-    data: filteredData,
+    data: filtered,
   };
 };
 const reducer = {
