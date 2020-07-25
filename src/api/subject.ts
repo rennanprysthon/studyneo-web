@@ -18,7 +18,6 @@ const addSubject = async (data:Subject) => {
         refresh_token: Storage.getUserRefreshToken(),
       },
     });
-    console.log(response.headers);
     Storage.setUserToken(response.headers.token);
     Storage.setUserRefreshToken(response.headers.refresh_token);
     return response.data;

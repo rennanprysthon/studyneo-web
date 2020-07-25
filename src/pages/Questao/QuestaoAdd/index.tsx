@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
 
 import { Select } from 'semantic-ui-react';
-import { useSelector } from 'react-redux';
-import { FiCamera, FiAlignLeft, FiSave } from 'react-icons/fi';
+import { useSelector, useDispatch } from 'react-redux';
+import {
+  FiCamera, FiAlignLeft, FiSave, FiArrowLeft,
+} from 'react-icons/fi';
 import { useToasts } from 'react-toast-notifications';
+import { useHistory } from 'react-router-dom';
+import { Creators } from '../../../redux/ducks/question';
 import {
   Container, Content, Form, FieldSet, Input, Label, Submit, TextArea, Button,
 } from './styles';
@@ -16,6 +20,7 @@ import AddSupportText from '../../../components/AddSupportText';
 import SupportTextContext, { Text } from '../../../contexts/SupportText';
 
 const QuestaoAdd: React.FC = () => {
+  const history = useHistory();
   const [enunciado, setEnunciado] = useState('');
   const [question, setQuestion] = useState('');
   const [texts, setTexts] = useState<Text[]>([] as Text[]);
@@ -25,6 +30,7 @@ const QuestaoAdd: React.FC = () => {
   const [alternativeD, setAlternativeD] = useState<Alternative>({ body: '', isCorrect: false });
   const [alternativeE, setAlternativeE] = useState<Alternative>({ body: '', isCorrect: false });
   const subject_id = useSelector((state:State) => state.subject.selected_subject_id);
+  const dispatch = useDispatch();
   const selectAlternatives = [
     { key: 'a', value: 'a', text: 'A' },
     { key: 'b', value: 'b', text: 'B' },
@@ -169,6 +175,7 @@ const QuestaoAdd: React.FC = () => {
     };
     resetForm();
     addToast('Questão adicionada com sucesso!', { appearance: 'success', autoDismiss: true });
+    dispatch(Creators.create(data));
   };
   return (
     <Container>
@@ -195,31 +202,31 @@ const QuestaoAdd: React.FC = () => {
               <Label>
                 A
               </Label>
-              <Input name="a" onChange={handleOnChangeAlternative} />
+              <Input name="a" onChange={handleOnChangeAlternative} value={alternativeA.body} />
             </FieldSet>
             <FieldSet>
               <Label>
                 B
               </Label>
-              <Input name="b" onChange={handleOnChangeAlternative} />
+              <Input name="b" onChange={handleOnChangeAlternative} value={alternativeB.body} />
             </FieldSet>
             <FieldSet>
               <Label>
                 C
               </Label>
-              <Input name="c" onChange={handleOnChangeAlternative} />
+              <Input name="c" onChange={handleOnChangeAlternative} value={alternativeC.body} />
             </FieldSet>
             <FieldSet>
               <Label>
                 D
               </Label>
-              <Input name="d" onChange={handleOnChangeAlternative} />
+              <Input name="d" onChange={handleOnChangeAlternative} value={alternativeD.body} />
             </FieldSet>
             <FieldSet>
               <Label>
                 E
               </Label>
-              <Input name="e" onChange={handleOnChangeAlternative} />
+              <Input name="e" onChange={handleOnChangeAlternative} value={alternativeE.body} />
             </FieldSet>
             <Select options={selectAlternatives} placeholder="Selecione a alternativa correta" onChange={handleOnChangeRightAlternative} />
             <FilterQuestions />
