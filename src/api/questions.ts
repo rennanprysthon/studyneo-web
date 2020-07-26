@@ -7,15 +7,11 @@ const requestQuestions = async (page:number) => {
     const response = await api.get<QuestionResponse>(`/questions?page=${page}`, {
       headers: {
         Authorization: `Bearer ${Storage.getUserToken()}`,
-        refresh_token: Storage.getUserRefreshToken(),
       },
     });
-    Storage.setUserToken(response.headers.token);
-    Storage.setUserRefreshToken(response.headers.refresh_token);
     return response.data;
   } catch (err) {
     Storage.setUserToken('');
-    Storage.setUserRefreshToken('');
     return {};
   }
 };
@@ -24,15 +20,11 @@ const listQuestionsPerSubject = async (subject_id:number, page:number) => {
     const response = await api.get<QuestionResponse>(`/questions/${subject_id}?page=${page}`, {
       headers: {
         Authorization: `Bearer ${Storage.getUserToken()}`,
-        refresh_token: Storage.getUserRefreshToken(),
       },
     });
-    Storage.setUserToken(response.headers.token);
-    Storage.setUserRefreshToken(response.headers.refresh_token);
     return response.data;
   } catch (err) {
     Storage.setUserToken('');
-    Storage.setUserRefreshToken('');
     return {};
   }
 };
@@ -41,33 +33,25 @@ const createQuestion = async (data:Data) => {
     const response = await api.post('/questions', data, {
       headers: {
         Authorization: `Bearer ${Storage.getUserToken()}`,
-        refresh_token: Storage.getUserRefreshToken(),
       },
     });
-    Storage.setUserToken(response.headers.token);
-    Storage.setUserRefreshToken(response.headers.refresh_token);
     return response.data;
   } catch (err) {
     Storage.setUserToken('');
-    Storage.setUserRefreshToken('');
     return {};
   }
 };
 
 const removeQuestion = async (id:number) => {
   try {
-    const response = await api.delete(`/questions/${id}`, {
+    await api.delete(`/questions/${id}`, {
       headers: {
         Authorization: `Bearer ${Storage.getUserToken()}`,
-        refresh_token: Storage.getUserRefreshToken(),
       },
     });
-    Storage.setUserToken(response.headers.token);
-    Storage.setUserRefreshToken(response.headers.refresh_token);
     return true;
   } catch (err) {
     Storage.setUserToken('');
-    Storage.setUserRefreshToken('');
     return false;
   }
 };

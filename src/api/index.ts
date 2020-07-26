@@ -1,8 +1,7 @@
 import axios from 'axios';
-import Storage from '../storage/auth';
 
 const api = axios.create({
-  baseURL: 'http://localhost:3333',
+  baseURL: 'http://67.205.162.29',
 
   headers: {
     post: {
@@ -10,11 +9,8 @@ const api = axios.create({
     },
   },
 });
-
-api.interceptors.request.use(
-  (config) => config,
-  (err) => err,
-);
-api.defaults.headers.Authorization = `Bearer ${Storage.getUserToken()}`;
-api.defaults.headers.refresh_token = Storage.getUserRefreshToken();
+// api.interceptors.request.use(
+//   (config) => config,
+//   (err) => err,
+// );
 export default api;
