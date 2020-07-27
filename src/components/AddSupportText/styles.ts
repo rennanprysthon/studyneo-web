@@ -8,6 +8,12 @@ export const Form = styled.form`
     margin-top: 10px;
   }
 `;
+export const ButtonsGroups = styled.div`
+  display:flex;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  max-width: 400px;
+`;
 export const Input = styled.input`
   background-color: #F0f0f0;
   padding: 10px 15px;
@@ -72,15 +78,22 @@ export const Table = styled.table`
     padding: 8px;
   }
 `;
-
-export const Tr = styled.tr`
+interface Props{
+  staged?:boolean
+}
+export const Tr = styled.tr<Props>`
+  height: 58px;
   &:nth-child(even) {
     background-color: #f2f2f2;
   }
   &:hover {
     background-color: #ddd;
   }
+
+  border: ${({ staged }) => (staged === true ? '2px dashed #FF9900' : '0px')}
+
 `;
+
 export const Td = styled.td`
   padding: 10px 20px;
 `;

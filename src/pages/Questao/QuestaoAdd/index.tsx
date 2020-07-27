@@ -53,6 +53,10 @@ const QuestaoAdd: React.FC = () => {
     const dataFiltered = texts.filter((val:Text, index:number) => index !== id);
     setTexts(dataFiltered);
   };
+  const updateText = (index:number, text:Text) => {
+    const updatedText = texts.map((val:Text, id:number) => (id === index ? text : val));
+    setTexts(updatedText);
+  };
   const handleOnChangeEnunciado = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setEnunciado(e.target.value);
   };
@@ -131,7 +135,10 @@ const QuestaoAdd: React.FC = () => {
   return (
     <Container>
 
-      <SupportTextContext.Provider value={{ addNewText, texts, removeText }}>
+      <SupportTextContext.Provider value={{
+        addNewText, texts, removeText, updateText,
+      }}
+      >
         <Content>
           <Form onSubmit={onSubmitForm}>
             <Label>
