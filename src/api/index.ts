@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'http://67.205.162.29',
+  baseURL: 'https://studyneo.com.br',
 
   headers: {
     post: {
