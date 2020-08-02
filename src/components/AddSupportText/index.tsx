@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 
 import {
-  FiAlignLeft, FiSave, FiEdit2, FiTrash,
+  FiAlignLeft, FiEdit2, FiTrash,
 } from 'react-icons/fi';
 
 import { Modal, Button as SemanticButton } from 'semantic-ui-react';

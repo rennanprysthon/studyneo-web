@@ -30,9 +30,6 @@ const QuestaoList: React.FC = () => {
   const editQuestion = (questionId:number) => {
     history.push(`/questoes/edit/${questionId}`);
   };
-  // useEffect(() => {
-  //   dispatch(Creators.request(page));
-  // }, [dispatch, page]);
 
   useEffect(() => {
     requestQuestionsBySubject();

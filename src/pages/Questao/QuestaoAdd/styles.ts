@@ -22,12 +22,6 @@ export const Form = styled.form`
   width: 100%;
 `;
 
-export const Input = styled.input`
-  background-color: #F0f0f0;
-  padding: 10px 15px;
-  width: 100%;
-  border-radius: 8px;
-`;
 export const TextArea = styled.textarea`
   background-color: #F0f0f0;
   padding: 20px;

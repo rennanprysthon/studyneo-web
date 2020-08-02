@@ -10,7 +10,7 @@ import { useToasts } from 'react-toast-notifications';
 import { useHistory } from 'react-router-dom';
 import { Creators } from '../../../redux/ducks/question';
 import {
-  Container, Content, Form, FieldSet, Input, Label, Button, TextArea,
+  Container, Content, Form, FieldSet, Label, Button, TextArea,
 } from './styles';
 import FilterQuestions from '../FilterQuestions';
 import { State } from '../../../types/globalstate';
@@ -66,7 +66,7 @@ const QuestaoAdd:React.FC<Props> = ({ match }) => {
   const handleOnChangeQuestion = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setQuestion(e.target.value);
   };
-  const handleOnChangeAlternative = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleOnChangeAlternative = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const element = e.target.name;
     const body = e.target.value;
     const newAlternative = [...alternatives];
@@ -190,31 +190,31 @@ const QuestaoAdd:React.FC<Props> = ({ match }) => {
               <Label>
                 A
               </Label>
-              <Input name="0" onChange={handleOnChangeAlternative} value={alternatives[0].body} />
+              <TextArea name="0" onChange={handleOnChangeAlternative} value={alternatives[0].body} />
             </FieldSet>
             <FieldSet>
               <Label>
                 B
               </Label>
-              <Input name="1" onChange={handleOnChangeAlternative} value={alternatives[1].body} />
+              <TextArea name="1" onChange={handleOnChangeAlternative} value={alternatives[1].body} />
             </FieldSet>
             <FieldSet>
               <Label>
                 C
               </Label>
-              <Input name="2" onChange={handleOnChangeAlternative} value={alternatives[2].body} />
+              <TextArea name="2" onChange={handleOnChangeAlternative} value={alternatives[2].body} />
             </FieldSet>
             <FieldSet>
               <Label>
                 D
               </Label>
-              <Input name="3" onChange={handleOnChangeAlternative} value={alternatives[3].body} />
+              <TextArea name="3" onChange={handleOnChangeAlternative} value={alternatives[3].body} />
             </FieldSet>
             <FieldSet>
               <Label>
                 E
               </Label>
-              <Input name="4" onChange={handleOnChangeAlternative} value={alternatives[4].body} />
+              <TextArea name="4" onChange={handleOnChangeAlternative} value={alternatives[4].body} />
             </FieldSet>
             <Select options={selectAlternatives} placeholder="Selecione a alternativa correta" onChange={handleOnChangeRightAlternative} value={rightAlternative} />
             <FilterQuestions />
