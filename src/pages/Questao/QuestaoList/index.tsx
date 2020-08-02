@@ -27,9 +27,12 @@ const QuestaoList: React.FC = () => {
     dispatch(Creators.remove(id));
     addToast('Questão removida com sucesso.', { appearance: 'success', autoDismiss: true });
   };
-  useEffect(() => {
-    dispatch(Creators.request(page));
-  }, [dispatch, page]);
+  const editQuestion = (questionId:number) => {
+    history.push(`/questoes/edit/${questionId}`);
+  };
+  // useEffect(() => {
+  //   dispatch(Creators.request(page));
+  // }, [dispatch, page]);
 
   useEffect(() => {
     requestQuestionsBySubject();
@@ -69,7 +72,7 @@ const QuestaoList: React.FC = () => {
               <Table.Cell>{Intl.DateTimeFormat('pt-BR').format(Date.parse(question.created_at))}</Table.Cell>
               <Table.Cell>{Intl.DateTimeFormat('pt-BR').format(Date.parse(question.updated_at))}</Table.Cell>
               <Table.Cell>
-                <Button type="button"><FiEdit2 /></Button>
+                <Button type="button" onClick={() => editQuestion(question.id)}><FiEdit2 /></Button>
                 <Button type="button" onClick={() => removeQuestion(question.id)}><FiTrash /></Button>
               </Table.Cell>
             </Table.Row>

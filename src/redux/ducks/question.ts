@@ -1,7 +1,7 @@
 import Redux from 'redux';
 import { createReducer } from 'reduxsauce';
 import {
-  QuestionResponse, Action, Data, CreateAction,
+  Action, Data, CreateAction, State,
 } from '../../types/questions';
 import Api from '../../api/questions';
 
@@ -9,6 +9,7 @@ export const Types = {
   REQUEST: 'questions/REQUEST',
   CREATE: 'questions/CREATE',
   REMOVE: 'questions/REMOVE',
+  UPDATE: 'questions/UPDATE',
 };
 
 export const Creators = {
@@ -28,9 +29,13 @@ export const Creators = {
     await Api.removeQuestion(id);
     dispatch({ type: Types.REMOVE, response: id });
   },
+  update: (id:number, data:Data) => async (dispatch:Redux.Dispatch) => {
+    const response = await Api.updateQuestion(id, data);
+    dispatch({ type: Types.UPDATE, response });
+  },
 };
 
-const INITIAL_STATE:QuestionResponse = {
+const INITIAL_STATE:State = {
   page: 1,
   total: 0,
   lastPage: 1,
@@ -38,7 +43,7 @@ const INITIAL_STATE:QuestionResponse = {
   data: [],
 };
 
-const request = (state = INITIAL_STATE, action:Action) => action.response;
+const request = (state = INITIAL_STATE, action:Action) => ({ ...state, ...action.response });
 const create = (state = INITIAL_STATE, action: CreateAction) => ({
   ...state,
   data: [...state.data, action.response],
@@ -50,10 +55,19 @@ const remove = (state = INITIAL_STATE, action:{type:string, response:number}) =>
     data: filtered,
   };
 };
+const update = (state = INITIAL_STATE, action: CreateAction) => {
+  const updatedData = action.response;
+  const filteredData = state.data.map((question) => (question.id === updatedData.id ? updatedData : question));
+  return {
+    ...state,
+    data: filteredData,
+  };
+};
 const reducer = {
   [Types.REQUEST]: request,
   [Types.CREATE]: create,
   [Types.REMOVE]: remove,
+  [Types.UPDATE]: update,
 };
 
 export default createReducer(INITIAL_STATE, reducer);

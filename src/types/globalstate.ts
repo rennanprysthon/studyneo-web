@@ -4,6 +4,6 @@ import * as Subject from './subject';
 
 export interface State{
   filter: Filters.State;
-  question: Question.QuestionResponse;
+  question: Question.State;
   subject: Subject.State
 }

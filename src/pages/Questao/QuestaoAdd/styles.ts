@@ -53,27 +53,14 @@ export const FieldSet = styled.div`
   align-items: center;
   justify-content: center;
 `;
-export const Button = styled.button`
-  padding: 10px;
-  width: 50%;
-  border-radius: 8px;
-  color: #3d3d3d;
-  background: var(--secondary);
-  font-weight: bold;
-  transition: all 200ms ease;
-  display:flex;
-  align-items:center;
-  justify-content: center;
-  cursor: pointer;
-  :hover{
-    background:#eeb900;
-  }
-`;
-export const Submit = styled.button`
+interface ButtonProps{
+  primary?:boolean
+}
+export const Button = styled.button<ButtonProps>`
   padding: 10px;
   width: 100%;
   border-radius: 8px;
-  background: #00B5E2;
+  background: ${(({ primary }) => (primary === true ? 'var(--primary)' : '#6e6e6e'))};
   color: #fff;
   font-weight: bold;
   transition: all 500ms ease;
@@ -82,8 +69,11 @@ export const Submit = styled.button`
   justify-content: center;
   cursor: pointer;
   :hover{
-    background:#eeb900;
+    background: ${(({ primary }) => (primary === true ? 'var(--secondary)' : '#3d3d3d'))};
+    color: ${(({ primary }) => (primary === true ? '#3d3d3d' : '#fff'))}
 
-  color: #3d3d3d;
   }
+`;
+export const GoBackButton = styled.button`
+
 `;

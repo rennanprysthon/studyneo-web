@@ -1,10 +1,10 @@
 import api from '.';
-import { QuestionResponse, Data } from '../types/questions';
+import { State, Data } from '../types/questions';
 import Storage from '../storage/auth';
 
 const requestQuestions = async (page:number) => {
   try {
-    const response = await api.get<QuestionResponse>(`/questions?page=${page}`, {
+    const response = await api.get<State>(`/questions?page=${page}`, {
       headers: {
         Authorization: `Bearer ${Storage.getUserToken()}`,
       },
@@ -17,7 +17,7 @@ const requestQuestions = async (page:number) => {
 };
 const listQuestionsPerSubject = async (subject_id:number, page:number) => {
   try {
-    const response = await api.get<QuestionResponse>(`/questions/${subject_id}?page=${page}`, {
+    const response = await api.get<State>(`/questions/${subject_id}?page=${page}`, {
       headers: {
         Authorization: `Bearer ${Storage.getUserToken()}`,
       },
@@ -55,10 +55,28 @@ const removeQuestion = async (id:number) => {
     return false;
   }
 };
+const getSpecificQuestion = async (id:number) => {
+  const response = await api.get<Data>(`/questions/view/${id}`, {
+    headers: {
+      Authorization: `Bearer ${Storage.getUserToken()}`,
+    },
+  });
+  return response.data;
+};
+const updateQuestion = async (id:number, question:Data) => {
+  const response = await api.put<Data>(`/questions/${id}`, question, {
+    headers: {
+      Authorization: `Bearer ${Storage.getUserToken()}`,
+    },
+  });
+  return response.data;
+};
 const Api = {
   requestQuestions,
   listQuestionsPerSubject,
   createQuestion,
   removeQuestion,
+  getSpecificQuestion,
+  updateQuestion,
 };
 export default Api;

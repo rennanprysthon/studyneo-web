@@ -12,19 +12,13 @@ export interface Question{
 
 export interface Action {
   type: string,
-  response: QuestionResponse
+  response: State
 }
 export interface CreateAction{
   type:string
   response: Question
 }
-export interface QuestionResponse {
-  page:number,
-  total:number,
-  lastPage:number,
-  perPage:number,
-  data: Question[]
-}
+
 
 export interface Text{
   title: string;
@@ -38,4 +32,11 @@ export interface Data{
   question:string,
   alternatives: Alternative[]
   texts?: Text[]|undefined
+}
+export interface State{
+  page:number,
+  total:number,
+  lastPage:number,
+  perPage:number,
+  data: Question[]
 }

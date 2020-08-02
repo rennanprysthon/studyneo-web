@@ -1,33 +1,34 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { Select, DropdownProps } from 'semantic-ui-react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
-  FiCamera, FiSave,
+  FiSave,
+  FiCornerDownLeft,
 } from 'react-icons/fi';
 import { useToasts } from 'react-toast-notifications';
+import { useHistory } from 'react-router-dom';
 import { Creators } from '../../../redux/ducks/question';
 import {
-  Container, Content, Form, FieldSet, Input, Label, Submit, TextArea, Button,
+  Container, Content, Form, FieldSet, Input, Label, Button, TextArea,
 } from './styles';
 import FilterQuestions from '../FilterQuestions';
 import { State } from '../../../types/globalstate';
 import { Alternative } from '../../../types/alternatives';
-
 import AddSupportText from '../../../components/AddSupportText';
 
 import SupportTextContext, { Text } from '../../../contexts/SupportText';
+import Api from '../../../api/questions';
 
-interface SelectAlternative {
-  key: string
-  value: number
-  text: string
+interface Props{
+  match: {params:{questionId:number}}|null
 }
-const QuestaoAdd: React.FC = () => {
+const QuestaoAdd:React.FC<Props> = ({ match }) => {
   const [enunciado, setEnunciado] = useState('');
   const [question, setQuestion] = useState('');
   const [texts, setTexts] = useState<Text[]>([] as Text[]);
-
+  const [rightAlternative, setRightAlternative] = useState();
+  const history = useHistory();
   const auxResetAlternatives = [
     { body: '', isCorrect: false },
     { body: '', isCorrect: false },
@@ -44,7 +45,9 @@ const QuestaoAdd: React.FC = () => {
     { key: 'd', value: 3, text: 'D' },
     { key: 'e', value: 4, text: 'E' },
   ];
-
+  const navigateBack = () => {
+    history.goBack();
+  };
   const { addToast } = useToasts();
   const addNewText = (text:Text) => {
     setTexts([...texts, text]);
@@ -75,6 +78,7 @@ const QuestaoAdd: React.FC = () => {
     newRightAlternative.forEach((alternative, index) => {
       if (index === selectDataset.value) {
         alternative.isCorrect = true;
+        setRightAlternative(index);
       } else {
         alternative.isCorrect = false;
       }
@@ -86,6 +90,7 @@ const QuestaoAdd: React.FC = () => {
     setQuestion('');
     setTexts([]);
     setAlternatives(auxResetAlternatives);
+    setRightAlternative(0);
   };
   const validateForm = () => {
     if (enunciado.length === 0) {
@@ -121,6 +126,7 @@ const QuestaoAdd: React.FC = () => {
       return;
     }
 
+
     const data = {
       enunciado,
       question,
@@ -129,9 +135,37 @@ const QuestaoAdd: React.FC = () => {
       texts,
     };
     resetForm();
-    addToast('Questão adicionada com sucesso!', { appearance: 'success', autoDismiss: true });
-    dispatch(Creators.create(data));
+
+    const questionId = match?.params.questionId;
+    if (questionId) {
+      dispatch(Creators.update(questionId, data));
+      addToast('Questão atualizada com sucesso!', { appearance: 'success', autoDismiss: true });
+      navigateBack();
+    } else {
+      dispatch(Creators.create(data));
+      addToast('Questão adicionada com sucesso!', { appearance: 'success', autoDismiss: true });
+    }
   };
+
+  useEffect(() => {
+    async function fillFields() {
+      const id = match?.params.questionId;
+      if (id) {
+        const response = await Api.getSpecificQuestion(id);
+
+        setEnunciado(response.enunciado);
+        setQuestion(response.question);
+        if (response.texts) { setTexts(response.texts); }
+        setAlternatives(response.alternatives);
+        response.alternatives.forEach((currentAlternative, index) => {
+          if (currentAlternative.isCorrect) {
+            setRightAlternative(index);
+          }
+        });
+      }
+    }
+    fillFields();
+  }, [match]);
   return (
     <Container>
 
@@ -147,10 +181,6 @@ const QuestaoAdd: React.FC = () => {
             <TextArea value={enunciado} onChange={handleOnChangeEnunciado} />
             <FieldSet>
               <AddSupportText />
-              <Button>
-                <FiCamera size={17} />
-                Adicionar Imagens
-              </Button>
             </FieldSet>
             <Label>
               Pergunta
@@ -186,13 +216,18 @@ const QuestaoAdd: React.FC = () => {
               </Label>
               <Input name="4" onChange={handleOnChangeAlternative} value={alternatives[4].body} />
             </FieldSet>
-            <Select options={selectAlternatives} placeholder="Selecione a alternativa correta" onChange={handleOnChangeRightAlternative} />
+            <Select options={selectAlternatives} placeholder="Selecione a alternativa correta" onChange={handleOnChangeRightAlternative} value={rightAlternative} />
             <FilterQuestions />
-            <Submit type="submit">
+            <Button type="submit" primary>
               <FiSave size={20} />
-              Adicionar questão
-            </Submit>
+              Salvar questão
+            </Button>
+            <Button type="button" onClick={() => navigateBack()}>
+              <FiCornerDownLeft size={20} />
+              Voltar
+            </Button>
           </Form>
+
         </Content>
       </SupportTextContext.Provider>
 
