@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import {
   FiSave,
@@ -16,8 +16,12 @@ import {
 } from './styles';
 import FilterQuestions from '../../Questao/FilterQuestions';
 import { State } from '../../../types/globalstate';
+import Api from '../../../api/overview';
 
-const OverviewAdd: React.FC = () => {
+interface Props{
+  match: {params:{overview_id:number}}|null
+}
+const OverviewAdd: React.FC<Props> = ({ match }) => {
   const [content, setContent] = useState('');
   const history = useHistory();
   const navigateBack = () => {
@@ -43,11 +47,28 @@ const OverviewAdd: React.FC = () => {
   const onSubmitForm = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (validateForm()) {
-      dispatch(Creators.create({ content, subject_id }));
-      addToast('Resumo criado com sucesso!', { appearance: 'success', autoDismiss: true });
-      setContent('');
+      const id = match?.params.overview_id;
+      if (id) {
+        dispatch(Creators.update(id, { content, subject_id }));
+        addToast('Resumo atualizado com sucesso!', { appearance: 'success', autoDismiss: true });
+        navigateBack();
+      } else {
+        dispatch(Creators.create({ content, subject_id }));
+        addToast('Resumo criado com sucesso!', { appearance: 'success', autoDismiss: true });
+        setContent('');
+      }
     }
   };
+  useEffect(() => {
+    async function getSpecific() {
+      const id = match?.params.overview_id;
+      if (id) {
+        const response = await Api.getSpecificOverview(id);
+        setContent(response.content);
+      }
+    }
+    getSpecific();
+  }, [match]);
   return (
     <Container>
       <Content>

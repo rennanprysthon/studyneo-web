@@ -27,9 +27,27 @@ const removeOverview = async (id:number) => {
     },
   });
 };
+const getSpecificOverview = async (id:number) => {
+  const response = await api.get(`/overviews/view/${id}`, {
+    headers: {
+      Authorization: `Bearer ${Storage.getUserToken()}`,
+    },
+  });
+  return response.data;
+};
+const updateOverview = async (id: number, data:Data) => {
+  const response = await api.put(`/overviews/${id}`, data, {
+    headers: {
+      Authorization: `Bearer ${Storage.getUserToken()}`,
+    },
+  });
+  return response.data;
+};
 const Api = {
   requestOverview,
   createOverview,
   removeOverview,
+  getSpecificOverview,
+  updateOverview,
 };
 export default Api;

@@ -36,6 +36,9 @@ const OverviewList: React.FC = () => {
     dispatch(Creators.remove(id));
     addToast('Resumo removido com sucesso!', { appearance: 'success', autoDismiss: true });
   };
+  const navigateEdit = (overview_id:number) => {
+    history.push(`/overview/edit/${overview_id}`);
+  };
   useEffect(() => {
     request();
   }, [request]);
@@ -73,7 +76,7 @@ const OverviewList: React.FC = () => {
                 <Table.Cell>{Intl.DateTimeFormat('pt-BR').format(Date.parse(overview.created_at))}</Table.Cell>
                 <Table.Cell>{Intl.DateTimeFormat('pt-BR').format(Date.parse(overview.updated_at))}</Table.Cell>
                 <Table.Cell>
-                  <Button type="button"><FiEdit2 /></Button>
+                  <Button type="button" onClick={() => navigateEdit(overview.id)}><FiEdit2 /></Button>
                   <Button type="button" onClick={() => handleRemoveOverview(overview.id)}><FiTrash /></Button>
                 </Table.Cell>
               </Table.Row>
