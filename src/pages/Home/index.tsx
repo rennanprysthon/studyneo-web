@@ -1,6 +1,15 @@
 import React from 'react';
 
-// import { Container } from './styles';
+import { Switch, Route } from 'react-router-dom';
 
-const Home: React.FC = () => <h1>Home</h1>;
+// import { Container } from './styles';
+import OverviewList from './OverviewList';
+import OverviewAdd from './OverviewAdd';
+
+const Home: React.FC = () => (
+  <Switch>
+    <Route component={OverviewAdd} path="/overview/add" />
+    <Route component={OverviewList} exact path="/" />
+  </Switch>
+);
 export default Home;

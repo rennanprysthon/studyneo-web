@@ -13,7 +13,7 @@ const AppRoutes: React.FC = () => (
     <Dashboard>
       <Switch>
         <Route component={Questao} path="/questoes" />
-        <Route component={Home} exact path="/" />
+        <Route component={Home} path="/" />
       </Switch>
     </Dashboard>
   </Provider>

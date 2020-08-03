@@ -1,5 +1,22 @@
 import styled from 'styled-components';
 
+
+export const Form = styled.form`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+`;
+
+
+export const TextArea = styled.textarea`
+  background-color: #F0f0f0;
+  padding: 20px;
+  min-height: 70vh;
+  width: 100%;
+  min-width: 450px;
+  border-radius: 8px;
+  font-family: 'Rubik', sans-serif;
+`;
 export const Container = styled.div`
   background-color: #fff;
   width: 100%;
@@ -15,37 +32,6 @@ export const Container = styled.div`
 export const Content = styled.div`
   display: flex;
   padding: 30px;
-`;
-export const Form = styled.form`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-`;
-
-export const TextArea = styled.textarea`
-  background-color: #F0f0f0;
-  padding: 20px;
-  min-height: 70px;
-  width: 100%;
-  min-width: 450px;
-  border-radius: 8px;
-  font-family: 'Rubik', sans-serif;
-`;
-export const Alternativas = styled.div`
-  display: flex;
-  flex-direction: column;
-  padding: 10px;
-`;
-
-export const Label = styled.h3`
-
-`;
-export const FieldSet = styled.div`
-  display:flex;
-  width: 100%;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
 `;
 interface ButtonProps{
   primary?:boolean
