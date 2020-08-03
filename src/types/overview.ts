@@ -5,7 +5,10 @@ export interface State{
   perPage:number,
   data: Overview[]
 }
-
+export interface Data{
+  subject_id: number;
+  content: string
+}
 export interface Overview{
   subject_id: number,
   content: string,

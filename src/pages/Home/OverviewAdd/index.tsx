@@ -6,11 +6,16 @@ import {
 } from 'react-icons/fi';
 
 import { useHistory } from 'react-router-dom';
+import { useToasts } from 'react-toast-notifications';
 
 import ReactMarkdown from 'react-markdown';
+import { useSelector, useDispatch } from 'react-redux';
+import { Creators } from '../../../redux/ducks/overview';
 import {
   Container, Content, TextArea, Form, Button,
 } from './styles';
+import FilterQuestions from '../../Questao/FilterQuestions';
+import { State } from '../../../types/globalstate';
 
 const OverviewAdd: React.FC = () => {
   const [content, setContent] = useState('');
@@ -18,14 +23,38 @@ const OverviewAdd: React.FC = () => {
   const navigateBack = () => {
     history.goBack();
   };
+  const { addToast } = useToasts();
+  const subject_id = useSelector((state: State) => state.subject.selected_subject_id);
+  const dispatch = useDispatch();
   const handleOnContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setContent(e.target.value);
+  };
+  const validateForm = () => {
+    if (subject_id === 0) {
+      addToast('Selecione o assunto referente ao resumo.', { appearance: 'warning', autoDismiss: true });
+      return false;
+    }
+    if (content.length === 0) {
+      addToast('O conteúdo do Resumo não deve estar vazio.', { appearance: 'warning', autoDismiss: true });
+      return false;
+    }
+    return true;
+  };
+  const onSubmitForm = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (validateForm()) {
+      dispatch(Creators.create({ content, subject_id }));
+      addToast('Resumo criado com sucesso!', { appearance: 'success', autoDismiss: true });
+      setContent('');
+    }
   };
   return (
     <Container>
       <Content>
-        <Form>
+        <Form onSubmit={onSubmitForm}>
           <TextArea value={content} onChange={handleOnContentChange} />
+          <br />
+          <FilterQuestions />
           <Button type="submit" primary>
             <FiSave size={20} />
             Salvar Resumo
