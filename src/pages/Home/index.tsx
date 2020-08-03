@@ -9,6 +9,7 @@ import OverviewAdd from './OverviewAdd';
 const Home: React.FC = () => (
   <Switch>
     <Route component={OverviewAdd} path="/overview/add" />
+    <Route component={OverviewAdd} path="/overview/edit/:overview_id" />
     <Route component={OverviewList} exact path="/" />
   </Switch>
 );

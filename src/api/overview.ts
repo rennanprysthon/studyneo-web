@@ -20,8 +20,16 @@ const createOverview = async (data:Data) => {
   return response.data;
 };
 
+const removeOverview = async (id:number) => {
+  await api.delete(`/overviews/${id}`, {
+    headers: {
+      Authorization: `Bearer ${Storage.getUserToken()}`,
+    },
+  });
+};
 const Api = {
   requestOverview,
   createOverview,
+  removeOverview,
 };
 export default Api;

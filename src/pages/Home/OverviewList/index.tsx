@@ -6,6 +6,7 @@ import {
 import { FiTrash, FiEdit2, FiPlus } from 'react-icons/fi';
 import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
+import { useToasts } from 'react-toast-notifications';
 import { Creators } from '../../../redux/ducks/overview';
 import { State } from '../../../types/globalstate';
 import { Container, Button, ButtonFrame } from './styles';
@@ -17,6 +18,7 @@ const OverviewList: React.FC = () => {
   const history = useHistory();
   const overviews = useSelector((state:State) => state.overview);
   const subject_id = useSelector((state:State) => state.subject.selected_subject_id);
+  const { addToast } = useToasts();
   const dispatch = useDispatch();
   const navigate = () => {
     history.push('/overview/add');
@@ -30,6 +32,10 @@ const OverviewList: React.FC = () => {
       dispatch(Creators.request(subject_id, page));
     }, [dispatch, page, subject_id],
   );
+  const handleRemoveOverview = (id:number) => {
+    dispatch(Creators.remove(id));
+    addToast('Resumo removido com sucesso!', { appearance: 'success', autoDismiss: true });
+  };
   useEffect(() => {
     request();
   }, [request]);
@@ -68,7 +74,7 @@ const OverviewList: React.FC = () => {
                 <Table.Cell>{Intl.DateTimeFormat('pt-BR').format(Date.parse(overview.updated_at))}</Table.Cell>
                 <Table.Cell>
                   <Button type="button"><FiEdit2 /></Button>
-                  <Button type="button"><FiTrash /></Button>
+                  <Button type="button" onClick={() => handleRemoveOverview(overview.id)}><FiTrash /></Button>
                 </Table.Cell>
               </Table.Row>
             ))

@@ -6,6 +6,7 @@ import Api from '../../api/overview';
 export const Types = {
   REQUEST: 'overview/REQUEST',
   CREATE: 'overview/CREATE',
+  REMOVE: 'overview/REMOVE',
 };
 
 const INITIAL_STATE:State = {
@@ -24,6 +25,10 @@ export const Creators = {
     const response = await Api.createOverview(data);
     dispatch({ type: Types.CREATE, response });
   },
+  remove: (id:number) => async (dispatch:Redux.Dispatch) => {
+    await Api.removeOverview(id);
+    dispatch({ type: Types.REMOVE, response: id });
+  },
 };
 interface ActionRequest{
   type: string,
@@ -33,10 +38,22 @@ interface ActionCreate{
   type: string,
   response: Overview
 }
+interface ActionRemove{
+  type:string
+  response:number
+}
 const request = (state = INITIAL_STATE, action:ActionRequest) => action.response;
 const create = (state = INITIAL_STATE, action:ActionCreate) => ({ ...state, data: [...state.data, action.response] });
+const remove = (state = INITIAL_STATE, action:ActionRemove) => {
+  const filteredData = state.data.filter((overview) => overview.id !== action.response);
+  return {
+    ...state,
+    data: filteredData,
+  };
+};
 const reducer = {
   [Types.REQUEST]: request,
   [Types.CREATE]: create,
+  [Types.REMOVE]: remove,
 };
 export default createReducer(INITIAL_STATE, reducer);
