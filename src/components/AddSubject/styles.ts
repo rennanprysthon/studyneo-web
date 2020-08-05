@@ -27,6 +27,7 @@ export const Input = styled.input`
   padding: 10px;
   width: 100%;
   max-width: 250px;
+  text-transform:capitalize;
 `;
 export const Table = styled.table`
   border-collapse: collapse;
@@ -36,6 +37,8 @@ export const Table = styled.table`
     border: 1px solid #ddd;
     padding: 8px;
   }
+  text-transform:capitalize;
+
 `;
 export const Tr = styled.tr`
   &:nth-child(even) {
