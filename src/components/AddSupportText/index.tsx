@@ -3,14 +3,17 @@ import React, { useContext, useState } from 'react';
 import {
   FiAlignLeft, FiEdit2, FiTrash,
 } from 'react-icons/fi';
+import { useToasts } from 'react-toast-notifications';
 
 import { Modal, Button as SemanticButton } from 'semantic-ui-react';
 import {
   Button, TextArea, Form, ButtonsGroups, Table, Tr, Td, Input, RoundedButton,
 } from './styles';
 import supportTextContext, { Text } from '../../contexts/SupportText';
+import Api from '../../api/text';
 
 const AddSupportText: React.FC = () => {
+  const { addToast } = useToasts();
   const [modalOpen, setModalOpen] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [stagedId, setStagedID] = useState(0);
@@ -45,12 +48,17 @@ const AddSupportText: React.FC = () => {
     setEditMode(false);
     toggleModal();
   };
-  const onSubmitForm = (e:React.FormEvent<HTMLButtonElement>) => {
+  const onSubmitForm = async (e:React.FormEvent<HTMLButtonElement>) => {
     e.preventDefault();
     if (editMode) {
+      const { id } = texts[stagedId];
+      if (id) {
+        await Api.updateText(id, { title, content });
+      }
       updateText(stagedId, { title, content });
       setStagedID(0);
       setEditMode(false);
+      addToast('Text atualizado com sucesso!', { appearance: 'success', autoDismiss: true });
     } else {
       addNewText({
         title,
