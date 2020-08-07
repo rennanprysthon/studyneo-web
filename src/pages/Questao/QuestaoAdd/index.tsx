@@ -19,6 +19,7 @@ import AddSupportText from '../../../components/AddSupportText';
 
 import SupportTextContext, { Text } from '../../../contexts/SupportText';
 import Api from '../../../api/questions';
+import TextApi from '../../../api/text';
 
 interface Props{
   match: {params:{questionId:number}}|null
@@ -52,7 +53,11 @@ const QuestaoAdd:React.FC<Props> = ({ match }) => {
   const addNewText = (text:Text) => {
     setTexts([...texts, text]);
   };
-  const removeText = (id:number) => {
+  const removeText = async (id:number) => {
+    const textToBeRemoved = texts.filter((val:Text, index:number) => id === index)[0];
+    if (textToBeRemoved.id) {
+      await TextApi.deleteText(textToBeRemoved.id);
+    }
     const dataFiltered = texts.filter((val:Text, index:number) => index !== id);
     setTexts(dataFiltered);
   };

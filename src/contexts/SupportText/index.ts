@@ -1,6 +1,7 @@
 import { createContext } from 'react';
 
 export interface Text{
+  id?:number
   title: string;
   content: string;
 }

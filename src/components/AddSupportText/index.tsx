@@ -19,6 +19,10 @@ const AddSupportText: React.FC = () => {
   } = useContext(supportTextContext);
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
+
+  const remove = async (index:number) => {
+    await removeText(index);
+  };
   const toggleModal = () => {
     setModalOpen(!modalOpen);
   };
@@ -100,7 +104,7 @@ const AddSupportText: React.FC = () => {
                     <RoundedButton onClick={() => handleOnEditClick(index, text)}>
                       <FiEdit2 />
                     </RoundedButton>
-                    <RoundedButton onClick={() => removeText(index)}>
+                    <RoundedButton onClick={() => remove(index)}>
                       <FiTrash />
                     </RoundedButton>
 
