@@ -1,12 +1,7 @@
 import api from '.';
-import Storage from '../storage/auth';
 
 const request = async (matter_id:number) => {
-  const response = await api.get(`/subjects/${matter_id}`, {
-    headers: {
-      Authorization: `Bearer ${Storage.getUserToken()}`,
-    },
-  });
+  const response = await api.get(`/subjects/${matter_id}`);
   return response.data;
 };
 
@@ -15,28 +10,11 @@ interface Subject{
   matter_id: number
 }
 const addSubject = async (data:Subject) => {
-  try {
-    const response = await api.post('/subjects', data, {
-      headers: {
-        Authorization: `Bearer ${Storage.getUserToken()}`,
-      },
-    });
-    return response.data;
-  } catch (err) {
-    Storage.setUserToken('');
-    return {};
-  }
+  const response = await api.post('/subjects', data);
+  return response.data;
 };
 const removeSubject = async (subject_id:number) => {
-  try {
-    await api.delete(`/subjects/${subject_id}`, {
-      headers: {
-        Authorization: `Bearer ${Storage.getUserToken()}`,
-      },
-    });
-  } catch (err) {
-    Storage.setUserToken('');
-  }
+  await api.delete(`/subjects/${subject_id}`);
 };
 const Api = {
   request,
