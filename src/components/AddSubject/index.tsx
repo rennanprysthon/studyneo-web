@@ -1,7 +1,8 @@
-import React, { ChangeEvent, useState } from 'react';
+import React, { ChangeEvent, useState, useEffect } from 'react';
 import { FiEdit, FiSave, FiTrash } from 'react-icons/fi';
 import { useDispatch, useSelector } from 'react-redux';
 import { Modal } from 'semantic-ui-react';
+import { useToasts } from 'react-toast-notifications';
 import { Creators } from '../../redux/ducks/subject';
 import { State } from '../../types/globalstate';
 import {
@@ -10,8 +11,11 @@ import {
 
 
 const AddSubject: React.FC = () => {
+  const { addToast } = useToasts();
   const [title, setTitle] = useState('');
-  const { subjects, loading } = useSelector((state:State) => state.subject);
+  const {
+    subjects, loading, message, error,
+  } = useSelector((state:State) => state.subject);
   const matter_id = useSelector((state:State) => state.filter.selected_matter_id);
   const dispatch = useDispatch();
   const handleButton = () => {
@@ -21,6 +25,17 @@ const AddSubject: React.FC = () => {
   const handleDeleteButton = (subject_id:number) => {
     dispatch(Creators.remove(subject_id));
   };
+  useEffect(() => {
+    if (error) {
+      addToast(error, { appearance: 'error', autoDismiss: true });
+    }
+  }, [addToast, error]);
+
+  useEffect(() => {
+    if (message) {
+      addToast(message, { appearance: 'success', autoDismiss: true });
+    }
+  }, [addToast, message]);
   return (
     <Modal size="tiny" trigger={<Button type="button"><FiEdit /></Button>}>
       <Modal.Header>Adicionar Assunto</Modal.Header>

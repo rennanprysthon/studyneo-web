@@ -43,6 +43,7 @@ export const Creators = {
       dispatch({ type: Types.LOADING, response: true });
       const response = await Api.addSubject(data);
       dispatch({ type: Types.CREATE, response });
+      dispatch({ type: Types.MESSAGE, response: 'O Assunto foi adicionado com sucesso!' });
     } catch (err) {
       dispatch({ type: Types.ERROR, response: 'Erro ao criar o Assunto.' });
     } finally {
@@ -54,6 +55,7 @@ export const Creators = {
       dispatch({ type: Types.LOADING, response: true });
       await Api.removeSubject(subject_id);
       dispatch({ type: Types.REMOVE, response: subject_id });
+      dispatch({ type: Types.MESSAGE, response: 'O Assunto foi removido com sucesso!' });
     } catch (err) {
       dispatch({ type: Types.ERROR, response: 'Erro ao remover o Assunto.' });
     } finally {
