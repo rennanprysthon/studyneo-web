@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 
 import {
-  Table, Pagination, PaginationProps, Button as AddButton,
+  Table, Pagination, PaginationProps, Button as AddButton, Loader,
 } from 'semantic-ui-react';
 import { FiTrash, FiEdit2, FiPlus } from 'react-icons/fi';
 import { useHistory } from 'react-router-dom';
@@ -16,7 +16,9 @@ import FilterSubject from '../../../components/FilterSubject';
 const OverviewList: React.FC = () => {
   const [page, setPage] = useState(1);
   const history = useHistory();
-  const overviews = useSelector((state:State) => state.overview);
+  const {
+    data: overviews, loading, error, message, total, perPage,
+  } = useSelector((state:State) => state.overview);
   const subject_id = useSelector((state:State) => state.subject.selected_subject_id);
   const { addToast } = useToasts();
   const dispatch = useDispatch();
@@ -34,7 +36,6 @@ const OverviewList: React.FC = () => {
   );
   const handleRemoveOverview = (id:number) => {
     dispatch(Creators.remove(id));
-    addToast('Resumo removido com sucesso!', { appearance: 'success', autoDismiss: true });
   };
   const navigateEdit = (overview_id:number) => {
     history.push(`/overview/edit/${overview_id}`);
@@ -42,6 +43,18 @@ const OverviewList: React.FC = () => {
   useEffect(() => {
     request();
   }, [request]);
+
+  useEffect(() => {
+    if (error) {
+      addToast(error, { appearance: 'error', autoDismiss: true });
+    }
+  }, [addToast, error]);
+
+  useEffect(() => {
+    if (message) {
+      addToast(message, { appearance: 'success', autoDismiss: true });
+    }
+  }, [addToast, message]);
   return (
     <Container>
       <FilterSubject />
@@ -69,7 +82,7 @@ const OverviewList: React.FC = () => {
         </Table.Header>
         <Table.Body>
           {
-            overviews.data.map((overview, index) => (
+            overviews.map((overview, index) => (
               <Table.Row key={overview.id}>
                 <Table.Cell>{(index + 1)}</Table.Cell>
                 <Table.Cell>{`${overview.content.substring(0, 200 - 3)}...`}</Table.Cell>
@@ -82,10 +95,11 @@ const OverviewList: React.FC = () => {
               </Table.Row>
             ))
           }
-
+          {loading && (<Loader active size="large" />)}
         </Table.Body>
       </Table>
-      <Pagination defaultActivePage={page} totalPages={(overviews.total / overviews.perPage)} onPageChange={pagination} />
+
+      <Pagination defaultActivePage={page} totalPages={(total / perPage)} onPageChange={pagination} />
     </Container>
   );
 };

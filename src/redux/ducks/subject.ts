@@ -15,7 +15,7 @@ export const Types = {
   SELECT: 'subject/SELECT',
   ERROR: 'subject/ERROR',
   MESSAGE: 'subject/MESSAGE',
-
+  RESET: 'subject/RESET',
 };
 
 const INITIAL_STATE:State = {
@@ -61,6 +61,7 @@ export const Creators = {
     }
   },
   select: (subject_id:number) => ({ type: Types.SELECT, subject_id }),
+  reset: () => ({ type: Types.RESET }),
 };
 interface ActionLoading {
   type:string,
@@ -86,6 +87,9 @@ interface ActionMessage{
   type: string,
   response:string
 }
+interface ActionReset{
+  type:string
+}
 const loading = (state = INITIAL_STATE, action:ActionLoading) => ({ ...state, loading: action.response });
 const request = (state = INITIAL_STATE, action: ActionRequest) => ({ ...state, subjects: action.response });
 const create = (state = INITIAL_STATE, action:ActionCreate) => ({ ...state, subjects: [...state.subjects, action.response] });
@@ -96,7 +100,13 @@ const remove = (state = INITIAL_STATE, action:ActionRemove) => {
 const select = (state = INITIAL_STATE, action:ActionSelectSubject) => ({ ...state, selected_subject_id: action.subject_id });
 const error = (state = INITIAL_STATE, action : ActionMessage) => ({ ...state, error: action.response });
 const message = (state = INITIAL_STATE, action: ActionMessage) => ({ ...state, message: action.response });
-
+const reset = (state = INITIAL_STATE, action: ActionReset) => ({
+  loading: false,
+  selected_subject_id: 0,
+  subjects: [],
+  error: '',
+  message: '',
+});
 
 const reducer = {
   [Types.LOADING]: loading,
@@ -106,6 +116,7 @@ const reducer = {
   [Types.SELECT]: select,
   [Types.ERROR]: error,
   [Types.MESSAGE]: message,
+  [Types.RESET]: reset,
 };
 
 export default createReducer(INITIAL_STATE, reducer);

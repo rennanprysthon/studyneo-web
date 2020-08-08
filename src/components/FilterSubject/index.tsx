@@ -21,8 +21,9 @@ const FilterSubject: React.FC = () => {
   }, [areas, selected_area_id]);
   const displaySubject = useMemo(() => (selected_matter_id !== 0), [selected_matter_id]);
 
-  const { selected_subject_id } = useSelector((state:State) => state.subject);
-  const subjects = useSelector((state:State) => state.subject.subjects);
+  const {
+    selected_subject_id, subjects, loading: subjectLoading, error: errorSubject,
+  } = useSelector((state:State) => state.subject);
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(FilterActions.request());
@@ -32,9 +33,15 @@ const FilterSubject: React.FC = () => {
       addToast(error, { appearance: 'error', autoDismiss: true });
     }
   }, [addToast, error]);
+  useEffect(() => {
+    if (errorSubject) {
+      addToast(errorSubject, { appearance: 'error', autoDismiss: true });
+    }
+  }, [addToast, errorSubject]);
   function handleAreaChange(event: React.FormEvent<HTMLSelectElement>) {
     const area_id = event.currentTarget.value;
     dispatch(FilterActions.selectArea(Number(area_id)));
+    dispatch(SubjectActions.reset());
   }
   function handleMatterChange(event:React.FormEvent<HTMLSelectElement>) {
     const matter_id = event.currentTarget.value;
@@ -47,6 +54,11 @@ const FilterSubject: React.FC = () => {
   }
   return (
     <Container>
+      {
+        loading && (
+          <Loader size="small" active inline />
+        )
+      }
       <Select onChange={handleAreaChange}>
         <option value="0" selected={selected_area_id === 0}>Área de conhecimento</option>
         {
@@ -56,36 +68,35 @@ const FilterSubject: React.FC = () => {
         }
       </Select>
       {displayMatter && (
-      <Select onChange={handleMatterChange}>
-        <option value="0" selected={selected_matter_id === 0}>Matéria</option>
-        {
+        <>
+          <Select onChange={handleMatterChange}>
+            <option value="0" selected={selected_matter_id === 0}>Matéria</option>
+            {
           matters.map((matter) => (
             <option value={matter.id} key={matter.id} selected={selected_matter_id === matter.id}>{matter.title}</option>
           ))
         }
-      </Select>
-      )}
+          </Select>
+          {
+            displaySubject && (
+              (!subjectLoading) === true ? (
+                <>
+                  <Select onChange={handleSubjectChange}>
+                    <option value="0" selected={selected_subject_id === 0}>Assunto</option>
+                    {
+                      subjects.map((subject) => (
+                        <option value={subject.id} key={subject.id} selected={selected_subject_id === subject.id}>{subject.title}</option>
+                      ))
+                    }
+                  </Select>
+                  <AddSubject />
+                </>
+              ) : (<Loader size="small" active inline />)
+            )
 
-      {
-        displaySubject && (
-          <>
-            <Select onChange={handleSubjectChange}>
-              <option value="0" selected={selected_subject_id === 0}>Assunto</option>
-              {
-          subjects.map((subject) => (
-            <option value={subject.id} key={subject.id} selected={selected_subject_id === subject.id}>{subject.title}</option>
-          ))
         }
-            </Select>
-            {
-              loading && (
-                <Loader size="small" active inline />
-              )
-            }
-            <AddSubject />
-          </>
-        )
-      }
+        </>
+      )}
 
 
     </Container>
