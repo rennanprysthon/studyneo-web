@@ -1,14 +1,18 @@
 import React, { useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { Loader } from 'semantic-ui-react';
+import { useToasts } from 'react-toast-notifications';
 import AddSubject from '../AddSubject';
 import { Creators as FilterActions } from '../../redux/ducks/filter';
 import { Creators as SubjectActions } from '../../redux/ducks/subject';
 import { State } from '../../types/globalstate';
 import { Container, Select } from './styles';
 
-
 const FilterSubject: React.FC = () => {
-  const { areas, selected_area_id, selected_matter_id } = useSelector((state:State) => state.filter);
+  const { addToast } = useToasts();
+  const {
+    areas, selected_area_id, selected_matter_id, loading, error,
+  } = useSelector((state:State) => state.filter);
   const displayMatter = useMemo(() => (selected_area_id !== 0), [selected_area_id]);
   const matters = useMemo(() => {
     if (selected_area_id === 0) return [];
@@ -23,6 +27,11 @@ const FilterSubject: React.FC = () => {
   useEffect(() => {
     dispatch(FilterActions.request());
   }, [dispatch]);
+  useEffect(() => {
+    if (error) {
+      addToast(error, { appearance: 'error', autoDismiss: true });
+    }
+  }, [addToast, error]);
   function handleAreaChange(event: React.FormEvent<HTMLSelectElement>) {
     const area_id = event.currentTarget.value;
     dispatch(FilterActions.selectArea(Number(area_id)));
@@ -68,10 +77,16 @@ const FilterSubject: React.FC = () => {
           ))
         }
             </Select>
+            {
+              loading && (
+                <Loader size="small" active inline />
+              )
+            }
             <AddSubject />
           </>
         )
       }
+
 
     </Container>
   );
