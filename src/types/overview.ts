@@ -3,7 +3,10 @@ export interface State{
   total:number,
   lastPage:number,
   perPage:number,
-  data: Overview[]
+  data: Overview[],
+  loading: boolean,
+  error?: string,
+  message?: string
 }
 export interface Data{
   subject_id: number;
@@ -14,5 +17,6 @@ export interface Overview{
   content: string,
   id:number,
   created_at: string,
-  updated_at: string
+  updated_at: string,
+
 }

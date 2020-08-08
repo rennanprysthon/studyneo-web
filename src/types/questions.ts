@@ -10,16 +10,6 @@ export interface Question{
   updated_at:string
 }
 
-export interface Action {
-  type: string,
-  response: State
-}
-export interface CreateAction{
-  type:string
-  response: Question
-}
-
-
 export interface Text{
   title: string;
   content: string;
@@ -38,5 +28,8 @@ export interface State{
   total:number,
   lastPage:number,
   perPage:number,
-  data: Question[]
+  data: Question[],
+  error?:string,
+  message?:string,
+  loading:boolean
 }

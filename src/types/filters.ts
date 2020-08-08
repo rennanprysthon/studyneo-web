@@ -9,16 +9,10 @@ export interface Area{
   title:string,
   matters: Matter[]
 }
-export interface Action{
-  type:string,
-  response: Area[]
-}
 export interface State{
   areas: Area[]
   selected_matter_id: number
   selected_area_id: number
-}
-export interface ActionMatter{
-  type:string,
-  matter:number
+  loading: boolean
+  error?:string
 }
