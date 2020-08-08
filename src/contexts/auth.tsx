@@ -2,6 +2,7 @@ import React, {
   createContext, useEffect, useState, useCallback,
 } from 'react';
 import { useToasts } from 'react-toast-notifications';
+import Storage from '../storage/auth';
 import Session from '../api/session';
 // import { Container } from './styles';
 interface Admin {
@@ -26,7 +27,7 @@ const AuthContext: React.FC = ({ children }) => {
     try {
       const loggedToken = await Session.login(email, password);
       setToken(loggedToken);
-      localStorage.setItem('@TOKEN', loggedToken);
+      Storage.setUserToken(loggedToken);
     } catch (err) {
       addToast('E-Mail ou senha inválidos, tente novamente.', { appearance: 'error', autoDismiss: true });
     }
