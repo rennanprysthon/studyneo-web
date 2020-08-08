@@ -14,7 +14,7 @@ import { Creators } from '../../../redux/ducks/overview';
 import {
   Container, Content, TextArea, Form, Button,
 } from './styles';
-import FilterQuestions from '../../Questao/FilterQuestions';
+import FilterSubject from '../../../components/FilterSubject';
 import { State } from '../../../types/globalstate';
 import Api from '../../../api/overview';
 
@@ -75,7 +75,7 @@ const OverviewAdd: React.FC<Props> = ({ match }) => {
         <Form onSubmit={onSubmitForm}>
           <TextArea value={content} onChange={handleOnContentChange} />
           <br />
-          <FilterQuestions />
+          <FilterSubject />
           <Button type="submit" primary>
             <FiSave size={20} />
             Salvar Resumo

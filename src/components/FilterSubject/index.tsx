@@ -1,13 +1,13 @@
 import React, { useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import AddSubject from '../../../components/AddSubject';
-import { Creators as FilterActions } from '../../../redux/ducks/filter';
-import { Creators as SubjectActions } from '../../../redux/ducks/subject';
-import { State } from '../../../types/globalstate';
+import AddSubject from '../AddSubject';
+import { Creators as FilterActions } from '../../redux/ducks/filter';
+import { Creators as SubjectActions } from '../../redux/ducks/subject';
+import { State } from '../../types/globalstate';
 import { Container, Select } from './styles';
 
 
-const FilterQuestions: React.FC = () => {
+const FilterSubject: React.FC = () => {
   const { areas, selected_area_id, selected_matter_id } = useSelector((state:State) => state.filter);
   const displayMatter = useMemo(() => (selected_area_id !== 0), [selected_area_id]);
   const matters = useMemo(() => {
@@ -77,4 +77,4 @@ const FilterQuestions: React.FC = () => {
   );
 };
 
-export default FilterQuestions;
+export default FilterSubject;

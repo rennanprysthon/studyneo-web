@@ -7,7 +7,7 @@ import { useToasts } from 'react-toast-notifications';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { Container, Button, ButtonFrame } from './styles';
-import FilterQuestions from '../FilterQuestions';
+import FilterSubject from '../../../components/FilterSubject';
 import { State } from '../../../types/globalstate';
 import { Creators } from '../../../redux/ducks/question';
 
@@ -36,7 +36,7 @@ const QuestaoList: React.FC = () => {
   }, [requestQuestionsBySubject]);
   return (
     <Container>
-      <FilterQuestions />
+      <FilterSubject />
       <ButtonFrame>
         <AddButton color="teal" animated onClick={navigate}>
           <AddButton.Content visible>

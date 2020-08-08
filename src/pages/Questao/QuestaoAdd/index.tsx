@@ -12,7 +12,7 @@ import { Creators } from '../../../redux/ducks/question';
 import {
   Container, Content, Form, FieldSet, Label, Button, TextArea,
 } from './styles';
-import FilterQuestions from '../FilterQuestions';
+import FilterSubject from '../../../components/FilterSubject';
 import { State } from '../../../types/globalstate';
 import { Alternative } from '../../../types/alternatives';
 import AddSupportText from '../../../components/AddSupportText';
@@ -222,7 +222,7 @@ const QuestaoAdd:React.FC<Props> = ({ match }) => {
               <TextArea name="4" onChange={handleOnChangeAlternative} value={alternatives[4].body} />
             </FieldSet>
             <Select options={selectAlternatives} placeholder="Selecione a alternativa correta" onChange={handleOnChangeRightAlternative} value={rightAlternative} />
-            <FilterQuestions />
+            <FilterSubject />
             <Button type="submit" primary>
               <FiSave size={20} />
               Salvar questão

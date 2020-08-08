@@ -10,7 +10,7 @@ import { useToasts } from 'react-toast-notifications';
 import { Creators } from '../../../redux/ducks/overview';
 import { State } from '../../../types/globalstate';
 import { Container, Button, ButtonFrame } from './styles';
-import FilterQuestions from '../../Questao/FilterQuestions';
+import FilterSubject from '../../../components/FilterSubject';
 
 
 const OverviewList: React.FC = () => {
@@ -44,7 +44,7 @@ const OverviewList: React.FC = () => {
   }, [request]);
   return (
     <Container>
-      <FilterQuestions />
+      <FilterSubject />
       <ButtonFrame>
         <AddButton color="teal" animated onClick={() => navigate()}>
           <AddButton.Content visible>
