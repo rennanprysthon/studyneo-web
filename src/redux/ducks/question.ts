@@ -13,6 +13,7 @@ export const Types = {
   ERROR: 'questions/ERROR',
   LOADING: 'questions/LOADING',
   MESSAGE: 'questions/MESSAGE',
+  RESET_MESSAGES: 'questions/RESET_MESSAGES',
 };
 
 const INITIAL_STATE:State = {
@@ -34,6 +35,8 @@ export const Creators = {
     } catch (err) {
       dispatch({ type: Types.ERROR, response: 'Erro ao buscar as Questões.' });
     } finally {
+      dispatch({ type: Types.RESET_MESSAGES });
+
       dispatch({ type: Types.LOADING, response: false });
     }
   },
@@ -45,6 +48,8 @@ export const Creators = {
     } catch (err) {
       dispatch({ type: Types.ERROR, response: 'Erro ao buscar os dados da Questão.' });
     } finally {
+      dispatch({ type: Types.RESET_MESSAGES });
+
       dispatch({ type: Types.LOADING, response: false });
     }
   },
@@ -57,6 +62,8 @@ export const Creators = {
     } catch (err) {
       dispatch({ type: Types.ERROR, response: 'Erro ao criar a Questão.' });
     } finally {
+      dispatch({ type: Types.RESET_MESSAGES });
+
       dispatch({ type: Types.LOADING, response: false });
     }
   },
@@ -69,6 +76,8 @@ export const Creators = {
     } catch (err) {
       dispatch({ type: Types.ERROR, response: 'Erro ao remover a Questão.' });
     } finally {
+      dispatch({ type: Types.RESET_MESSAGES });
+
       dispatch({ type: Types.LOADING, response: false });
     }
   },
@@ -81,6 +90,8 @@ export const Creators = {
     } catch (err) {
       dispatch({ type: Types.ERROR, response: 'Erro ao atualizar a Questão.' });
     } finally {
+      dispatch({ type: Types.RESET_MESSAGES });
+
       dispatch({ type: Types.LOADING, response: false });
     }
   },
@@ -107,6 +118,9 @@ interface ActionMessage{
   type: string,
   response:string
 }
+interface ActionResetMessages{
+  type: string
+}
 const request = (state = INITIAL_STATE, action:ActionRequest) => ({ ...state, ...action.response });
 const create = (state = INITIAL_STATE, action: ActionCreate) => ({
   ...state,
@@ -130,6 +144,7 @@ const update = (state = INITIAL_STATE, action: ActionCreate) => {
 const loading = (state = INITIAL_STATE, action:ActionLoading) => ({ ...state, loading: action.response });
 const error = (state = INITIAL_STATE, action : ActionMessage) => ({ ...state, error: action.response });
 const message = (state = INITIAL_STATE, action: ActionMessage) => ({ ...state, message: action.response });
+const reset = (state = INITIAL_STATE, action: ActionResetMessages) => ({ ...state, error: undefined, message: undefined });
 
 const reducer = {
   [Types.REQUEST]: request,
@@ -139,6 +154,7 @@ const reducer = {
   [Types.LOADING]: loading,
   [Types.ERROR]: error,
   [Types.MESSAGE]: message,
+  [Types.RESET_MESSAGES]: reset,
 };
 
 export default createReducer(INITIAL_STATE, reducer);

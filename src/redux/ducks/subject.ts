@@ -16,6 +16,7 @@ export const Types = {
   ERROR: 'subject/ERROR',
   MESSAGE: 'subject/MESSAGE',
   RESET: 'subject/RESET',
+  RESET_MESSAGES: 'subject/RESET_MESSAGES',
 };
 
 const INITIAL_STATE:State = {
@@ -35,6 +36,8 @@ export const Creators = {
     } catch (err) {
       dispatch({ type: Types.ERROR, response: 'Erro ao buscar os Assuntos.' });
     } finally {
+      dispatch({ type: Types.RESET_MESSAGES });
+
       dispatch({ type: Types.LOADING, response: false });
     }
   },
@@ -47,6 +50,8 @@ export const Creators = {
     } catch (err) {
       dispatch({ type: Types.ERROR, response: 'Erro ao criar o Assunto.' });
     } finally {
+      dispatch({ type: Types.RESET_MESSAGES });
+
       dispatch({ type: Types.LOADING, response: false });
     }
   },
@@ -59,6 +64,8 @@ export const Creators = {
     } catch (err) {
       dispatch({ type: Types.ERROR, response: 'Erro ao remover o Assunto.' });
     } finally {
+      dispatch({ type: Types.RESET_MESSAGES });
+
       dispatch({ type: Types.LOADING, response: false });
     }
   },
@@ -92,6 +99,9 @@ interface ActionMessage{
 interface ActionReset{
   type:string
 }
+interface ActionResetMessages{
+  type: string
+}
 const loading = (state = INITIAL_STATE, action:ActionLoading) => ({ ...state, loading: action.response });
 const request = (state = INITIAL_STATE, action: ActionRequest) => ({ ...state, subjects: action.response });
 const create = (state = INITIAL_STATE, action:ActionCreate) => ({ ...state, subjects: [...state.subjects, action.response] });
@@ -109,6 +119,7 @@ const reset = (state = INITIAL_STATE, action: ActionReset) => ({
   error: '',
   message: '',
 });
+const resetMessages = (state = INITIAL_STATE, action: ActionResetMessages) => ({ ...state, error: undefined, message: undefined });
 
 const reducer = {
   [Types.LOADING]: loading,
@@ -119,6 +130,7 @@ const reducer = {
   [Types.ERROR]: error,
   [Types.MESSAGE]: message,
   [Types.RESET]: reset,
+  [Types.RESET_MESSAGES]: resetMessages,
 };
 
 export default createReducer(INITIAL_STATE, reducer);
