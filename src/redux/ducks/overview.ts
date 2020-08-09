@@ -34,8 +34,8 @@ export const Creators = {
     } catch (err) {
       dispatch({ type: Types.ERROR, response: 'Erro ao buscar os Resumos.' });
     } finally {
-      dispatch({ type: Types.RESET_MESSAGES });
       dispatch({ type: Types.LOADING, response: false });
+      dispatch({ type: Types.RESET_MESSAGES });
     }
   },
   create: (data:Data) => async (dispatch: Redux.Dispatch) => {
@@ -47,8 +47,8 @@ export const Creators = {
     } catch (err) {
       dispatch({ type: Types.ERROR, response: 'Erro ao criar o Resumo.' });
     } finally {
-      dispatch({ type: Types.RESET_MESSAGES });
       dispatch({ type: Types.LOADING, response: false });
+      dispatch({ type: Types.RESET_MESSAGES });
     }
   },
   remove: (id:number) => async (dispatch:Redux.Dispatch) => {
@@ -60,8 +60,8 @@ export const Creators = {
     } catch (err) {
       dispatch({ type: Types.ERROR, response: 'Erro ao remover o Resumo.' });
     } finally {
-      dispatch({ type: Types.RESET_MESSAGES });
       dispatch({ type: Types.LOADING, response: false });
+      dispatch({ type: Types.RESET_MESSAGES });
     }
   },
   update: (id:number, data:Data) => async (dispatch: Redux.Dispatch) => {
@@ -73,8 +73,8 @@ export const Creators = {
     } catch (err) {
       dispatch({ type: Types.ERROR, response: 'Erro ao atualizar o Resumo.' });
     } finally {
-      dispatch({ type: Types.RESET_MESSAGES });
       dispatch({ type: Types.LOADING, response: false });
+      dispatch({ type: Types.RESET_MESSAGES });
     }
   },
 };

@@ -36,9 +36,8 @@ export const Creators = {
     } catch (err) {
       dispatch({ type: Types.ERROR, response: 'Erro ao buscar os Assuntos.' });
     } finally {
-      dispatch({ type: Types.RESET_MESSAGES });
-
       dispatch({ type: Types.LOADING, response: false });
+      dispatch({ type: Types.RESET_MESSAGES });
     }
   },
   create: (data:SubjectData) => async (dispatch:Redux.Dispatch) => {
@@ -50,9 +49,8 @@ export const Creators = {
     } catch (err) {
       dispatch({ type: Types.ERROR, response: 'Erro ao criar o Assunto.' });
     } finally {
-      dispatch({ type: Types.RESET_MESSAGES });
-
       dispatch({ type: Types.LOADING, response: false });
+      dispatch({ type: Types.RESET_MESSAGES });
     }
   },
   remove: (subject_id:number) => async (dispatch:Redux.Dispatch) => {
@@ -64,9 +62,8 @@ export const Creators = {
     } catch (err) {
       dispatch({ type: Types.ERROR, response: 'Erro ao remover o Assunto.' });
     } finally {
-      dispatch({ type: Types.RESET_MESSAGES });
-
       dispatch({ type: Types.LOADING, response: false });
+      dispatch({ type: Types.RESET_MESSAGES });
     }
   },
   select: (subject_id:number) => ({ type: Types.SELECT, subject_id }),

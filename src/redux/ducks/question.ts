@@ -35,9 +35,8 @@ export const Creators = {
     } catch (err) {
       dispatch({ type: Types.ERROR, response: 'Erro ao buscar as Questões.' });
     } finally {
-      dispatch({ type: Types.RESET_MESSAGES });
-
       dispatch({ type: Types.LOADING, response: false });
+      dispatch({ type: Types.RESET_MESSAGES });
     }
   },
   requestFilteredBySubject: (subject_id:number, page:number) => async (dispatch:Redux.Dispatch) => {
@@ -48,9 +47,8 @@ export const Creators = {
     } catch (err) {
       dispatch({ type: Types.ERROR, response: 'Erro ao buscar os dados da Questão.' });
     } finally {
-      dispatch({ type: Types.RESET_MESSAGES });
-
       dispatch({ type: Types.LOADING, response: false });
+      dispatch({ type: Types.RESET_MESSAGES });
     }
   },
   create: (data:Data) => async (dispatch:Redux.Dispatch) => {
@@ -62,9 +60,8 @@ export const Creators = {
     } catch (err) {
       dispatch({ type: Types.ERROR, response: 'Erro ao criar a Questão.' });
     } finally {
-      dispatch({ type: Types.RESET_MESSAGES });
-
       dispatch({ type: Types.LOADING, response: false });
+      dispatch({ type: Types.RESET_MESSAGES });
     }
   },
   remove: (id:number) => async (dispatch: Redux.Dispatch) => {
@@ -76,9 +73,8 @@ export const Creators = {
     } catch (err) {
       dispatch({ type: Types.ERROR, response: 'Erro ao remover a Questão.' });
     } finally {
-      dispatch({ type: Types.RESET_MESSAGES });
-
       dispatch({ type: Types.LOADING, response: false });
+      dispatch({ type: Types.RESET_MESSAGES });
     }
   },
   update: (id:number, data:Data) => async (dispatch:Redux.Dispatch) => {
@@ -90,9 +86,8 @@ export const Creators = {
     } catch (err) {
       dispatch({ type: Types.ERROR, response: 'Erro ao atualizar a Questão.' });
     } finally {
-      dispatch({ type: Types.RESET_MESSAGES });
-
       dispatch({ type: Types.LOADING, response: false });
+      dispatch({ type: Types.RESET_MESSAGES });
     }
   },
 };
