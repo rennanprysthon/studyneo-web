@@ -1,4 +1,6 @@
-import React, { ChangeEvent, useState, useEffect } from 'react';
+import React, {
+  ChangeEvent, useState, useEffect, useCallback,
+} from 'react';
 import { FiEdit, FiSave, FiTrash } from 'react-icons/fi';
 import { useDispatch, useSelector } from 'react-redux';
 import { Modal } from 'semantic-ui-react';
@@ -25,17 +27,23 @@ const AddSubject: React.FC = () => {
   const handleDeleteButton = (subject_id:number) => {
     dispatch(Creators.remove(subject_id));
   };
-  useEffect(() => {
+  const displayError = useCallback(() => {
     if (error) {
       addToast(error, { appearance: 'error', autoDismiss: true });
     }
   }, [addToast, error]);
-
   useEffect(() => {
+    displayError();
+  }, [displayError]);
+
+  const displayMessage = useCallback(() => {
     if (message) {
       addToast(message, { appearance: 'success', autoDismiss: true });
     }
   }, [addToast, message]);
+  useEffect(() => {
+    displayMessage();
+  }, [displayMessage]);
   return (
     <Modal size="tiny" trigger={<Button type="button"><FiEdit /></Button>}>
       <Modal.Header>Adicionar Assunto</Modal.Header>

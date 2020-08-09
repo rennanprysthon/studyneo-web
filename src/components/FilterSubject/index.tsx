@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Loader } from 'semantic-ui-react';
 import { useToasts } from 'react-toast-notifications';
@@ -25,19 +25,31 @@ const FilterSubject: React.FC = () => {
     selected_subject_id, subjects, loading: subjectLoading, error: errorSubject,
   } = useSelector((state:State) => state.subject);
   const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(FilterActions.request());
-  }, [dispatch]);
-  useEffect(() => {
+
+  const displayError = useCallback(() => {
     if (error) {
       addToast(error, { appearance: 'error', autoDismiss: true });
     }
   }, [addToast, error]);
+
   useEffect(() => {
+    dispatch(FilterActions.request());
+  }, [dispatch]);
+
+  useEffect(() => {
+    displayError();
+  }, [displayError]);
+
+  const displaySubjectError = useCallback(() => {
     if (errorSubject) {
       addToast(errorSubject, { appearance: 'error', autoDismiss: true });
     }
   }, [addToast, errorSubject]);
+
+  useEffect(() => {
+    displaySubjectError();
+  }, [displaySubjectError]);
+
   function handleAreaChange(event: React.FormEvent<HTMLSelectElement>) {
     const area_id = event.currentTarget.value;
     dispatch(FilterActions.selectArea(Number(area_id)));
