@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 
 import {
   FiSave,
@@ -28,6 +28,27 @@ const OverviewAdd: React.FC<Props> = ({ match }) => {
     history.goBack();
   };
   const { addToast } = useToasts();
+  const { message, error } = useSelector((state:State) => state.overview);
+
+  const displayError = useCallback(() => {
+    if (error) {
+      addToast(error, { appearance: 'error', autoDismiss: true });
+    }
+  }, [addToast, error]);
+  useEffect(() => {
+    displayError();
+  }, [displayError]);
+
+  const displayMessage = useCallback(() => {
+    if (message) {
+      addToast(message, { appearance: 'success', autoDismiss: true });
+    }
+  }, [addToast, message]);
+  useEffect(() => {
+    displayMessage();
+  }, [displayMessage]);
+
+
   const subject_id = useSelector((state: State) => state.subject.selected_subject_id);
   const dispatch = useDispatch();
   const handleOnContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -50,11 +71,9 @@ const OverviewAdd: React.FC<Props> = ({ match }) => {
       const id = match?.params.overview_id;
       if (id) {
         dispatch(Creators.update(id, { content, subject_id }));
-        addToast('Resumo atualizado com sucesso!', { appearance: 'success', autoDismiss: true });
         navigateBack();
       } else {
         dispatch(Creators.create({ content, subject_id }));
-        addToast('Resumo criado com sucesso!', { appearance: 'success', autoDismiss: true });
         setContent('');
       }
     }
