@@ -53,12 +53,16 @@ const AddSupportText: React.FC = () => {
     if (editMode) {
       const { id } = texts[stagedId];
       if (id) {
-        await Api.updateText(id, { title, content });
+        try {
+          await Api.updateText(id, { title, content });
+          addToast('Texto atualizado com sucesso!', { appearance: 'success', autoDismiss: true });
+        } catch (err) {
+          addToast('Erro ao atualizar o Texto!', { appearance: 'error', autoDismiss: true });
+        }
       }
       updateText(stagedId, { title, content });
       setStagedID(0);
       setEditMode(false);
-      addToast('Text atualizado com sucesso!', { appearance: 'success', autoDismiss: true });
     } else {
       addNewText({
         title,
