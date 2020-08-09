@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 
 import { Select, DropdownProps } from 'semantic-ui-react';
 import { useSelector, useDispatch } from 'react-redux';
@@ -6,9 +6,11 @@ import {
   FiSave,
   FiCornerDownLeft,
 } from 'react-icons/fi';
-import { useToasts } from 'react-toast-notifications';
 import { useHistory } from 'react-router-dom';
+import { useToasts } from 'react-toast-notifications';
 import { Creators } from '../../../redux/ducks/question';
+
+
 import {
   Container, Content, Form, FieldSet, Label, Button, TextArea,
 } from './styles';
@@ -38,6 +40,8 @@ const QuestaoAdd:React.FC<Props> = ({ match }) => {
     { body: '', isCorrect: false }];
   const [alternatives, setAlternatives] = useState<Alternative[]>(auxResetAlternatives);
   const subject_id = useSelector((state:State) => state.subject.selected_subject_id);
+  const { message, error } = useSelector((state:State) => state.question);
+
   const dispatch = useDispatch();
   const selectAlternatives = [
     { key: 'a', value: 0, text: 'A' },
@@ -50,6 +54,23 @@ const QuestaoAdd:React.FC<Props> = ({ match }) => {
     history.goBack();
   };
   const { addToast } = useToasts();
+  const displayError = useCallback(() => {
+    if (error) {
+      addToast(error, { appearance: 'error', autoDismiss: true });
+    }
+  }, [addToast, error]);
+  useEffect(() => {
+    displayError();
+  }, [displayError]);
+
+  const displayMessage = useCallback(() => {
+    if (message) {
+      addToast(message, { appearance: 'success', autoDismiss: true });
+    }
+  }, [addToast, message]);
+  useEffect(() => {
+    displayMessage();
+  }, [displayMessage]);
   const addNewText = (text:Text) => {
     setTexts([...texts, text]);
   };
@@ -144,11 +165,9 @@ const QuestaoAdd:React.FC<Props> = ({ match }) => {
     const questionId = match?.params.questionId;
     if (questionId) {
       dispatch(Creators.update(questionId, data));
-      addToast('Questão atualizada com sucesso!', { appearance: 'success', autoDismiss: true });
       navigateBack();
     } else {
       dispatch(Creators.create(data));
-      addToast('Questão adicionada com sucesso!', { appearance: 'success', autoDismiss: true });
     }
   };
 

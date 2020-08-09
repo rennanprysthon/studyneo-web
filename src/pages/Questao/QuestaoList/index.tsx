@@ -1,6 +1,8 @@
-import React, { useEffect, useCallback } from 'react';
+import React, { useEffect, useCallback, useState } from 'react';
 
-import { Table, Pagination, Button as AddButton } from 'semantic-ui-react';
+import {
+  Table, Pagination, PaginationProps, Button as AddButton, Loader,
+} from 'semantic-ui-react';
 import { FiTrash, FiEdit2, FiPlus } from 'react-icons/fi';
 import { useToasts } from 'react-toast-notifications';
 
@@ -12,28 +14,54 @@ import { State } from '../../../types/globalstate';
 import { Creators } from '../../../redux/ducks/question';
 
 const QuestaoList: React.FC = () => {
+  const [page, setPage] = useState(1);
+
   const dispatch = useDispatch();
   const { selected_subject_id: subject_id } = useSelector((state:State) => state.subject);
-  const { page, data } = useSelector((state:State) => state.question);
+  const {
+    data, total, perPage, loading, message, error,
+  } = useSelector((state:State) => state.question);
   const history = useHistory();
-  const requestQuestionsBySubject = useCallback(() => {
-    dispatch(Creators.requestFilteredBySubject(subject_id, page));
-  }, [dispatch, subject_id, page]);
+
   const navigate = () => {
     history.push('/questoes/add');
   };
   const { addToast } = useToasts();
   const removeQuestion = (id:number) => {
     dispatch(Creators.remove(id));
-    addToast('Questão removida com sucesso.', { appearance: 'success', autoDismiss: true });
+  };
+  const pagination = (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>, paginationData: PaginationProps) => {
+    const { activePage } = paginationData;
+    setPage(Number(activePage));
   };
   const editQuestion = (questionId:number) => {
     history.push(`/questoes/edit/${questionId}`);
   };
+  const request = useCallback(() => {
+    dispatch(Creators.requestFilteredBySubject(subject_id, page));
+  }, [dispatch, subject_id, page]);
 
   useEffect(() => {
-    requestQuestionsBySubject();
-  }, [requestQuestionsBySubject]);
+    request();
+  }, [request]);
+
+  const displayError = useCallback(() => {
+    if (error) {
+      addToast(error, { appearance: 'error', autoDismiss: true });
+    }
+  }, [addToast, error]);
+  useEffect(() => {
+    displayError();
+  }, [displayError]);
+
+  const displayMessage = useCallback(() => {
+    if (message) {
+      addToast(message, { appearance: 'success', autoDismiss: true });
+    }
+  }, [addToast, message]);
+  useEffect(() => {
+    displayMessage();
+  }, [displayMessage]);
   return (
     <Container>
       <FilterSubject />
@@ -74,9 +102,11 @@ const QuestaoList: React.FC = () => {
               </Table.Cell>
             </Table.Row>
           ))}
+          {loading && (<Loader active size="large" />)}
         </Table.Body>
       </Table>
-      <Pagination defaultActivePage={5} totalPages={10} />
+      <Pagination defaultActivePage={page} totalPages={(total / perPage)} onPageChange={pagination} />
+
     </Container>
   );
 };
