@@ -1,7 +1,5 @@
 import Redux from 'redux';
 import { createReducer } from 'reduxsauce';
-import { FiSave } from 'react-icons/fi';
-import { create } from 'domain';
 import {
   State,
 } from '../../types/user';
