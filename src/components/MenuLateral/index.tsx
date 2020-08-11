@@ -18,7 +18,7 @@ const MenuLateral: React.FC = () => (
     <ul>
       <li><Link to="/"><MdHome color="#fff" size={27} /></Link></li>
       <li><Link to="/questoes"><MdBook color="#fff" size={27} /></Link></li>
-      <li><Link to="/"><MdPerson color="#fff" size={27} /></Link></li>
+      <li><Link to="/users"><MdPerson color="#fff" size={27} /></Link></li>
       <li><Link to="/"><MdCheckCircle color="#fff" size={27} /></Link></li>
       <li>item1</li>
       <li>item1</li>
