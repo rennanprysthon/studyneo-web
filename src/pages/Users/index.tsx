@@ -1,20 +1,59 @@
-import React, { useState } from 'react';
-
+import React, { useState, useCallback, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import {
-  Table, Search, Pagination, PaginationProps,
+  Table, Search, Pagination, PaginationProps, Loader,
 } from 'semantic-ui-react';
-import { Container } from './styles';
+import { useToasts } from 'react-toast-notifications';
+import { FiRefreshCw } from 'react-icons/fi';
+import { Creators } from '../../redux/ducks/user';
+import { State } from '../../types/globalstate';
+import { Container, Button, ButtonsGroup } from './styles';
 
 const Users: React.FC = () => {
   const [page, setPage] = useState(1);
+  const { addToast } = useToasts();
+
+  const {
+    loading, data, total, perPage, error, message,
+  } = useSelector((state:State) => state.user);
+  const dispatch = useDispatch();
   const pagination = (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>, paginationData: PaginationProps) => {
     const { activePage } = paginationData;
     setPage(Number(activePage));
   };
+  const request = useCallback(() => {
+    dispatch(Creators.request(page));
+  }, [dispatch, page]);
+  useEffect(() => {
+    request();
+  }, [request]);
 
+
+  const displayError = useCallback(() => {
+    if (error) {
+      addToast(error, { appearance: 'error', autoDismiss: true });
+    }
+  }, [addToast, error]);
+  useEffect(() => {
+    displayError();
+  }, [displayError]);
+
+  const displayMessage = useCallback(() => {
+    if (message) {
+      addToast(message, { appearance: 'success', autoDismiss: true });
+    }
+  }, [addToast, message]);
+  useEffect(() => {
+    displayMessage();
+  }, [displayMessage]);
   return (
     <Container>
-      <Search />
+      <ButtonsGroup>
+        <Search />
+        <Button type="button" onClick={() => request()}>
+          <FiRefreshCw />
+        </Button>
+      </ButtonsGroup>
       <Table color="teal" celled>
         <Table.Header>
           <Table.Row>
@@ -27,17 +66,28 @@ const Users: React.FC = () => {
           </Table.Row>
         </Table.Header>
         <Table.Body>
-          <Table.Row>
-            <Table.Cell>1</Table.Cell>
-            <Table.Cell>FILIPE MELO DA SILVA</Table.Cell>
-            <Table.Cell>filipemelo032@gmail.com</Table.Cell>
-            <Table.Cell positive>Ativo</Table.Cell>
-            <Table.Cell>10/08/2020</Table.Cell>
-            <Table.Cell>10/08/2020</Table.Cell>
-          </Table.Row>
+          {
+
+          data.map((user) => (
+            <Table.Row key={user.id}>
+              <Table.Cell>{user.id}</Table.Cell>
+              <Table.Cell>{user.name}</Table.Cell>
+              <Table.Cell>{user.email}</Table.Cell>
+              <Table.Cell positive={user.is_activated === true} negative={user.is_activated === false}>
+                {
+            user.is_activated === true ? 'Ativo(a)' : 'Desativado(a)'
+          }
+              </Table.Cell>
+              <Table.Cell>{Intl.DateTimeFormat('pt-BR').format(Date.parse(user.created_at))}</Table.Cell>
+              <Table.Cell>{Intl.DateTimeFormat('pt-BR').format(Date.parse(user.updated_at))}</Table.Cell>
+            </Table.Row>
+          ))
+          }
+
+          {loading && (<Loader active size="large" />)}
         </Table.Body>
       </Table>
-      <Pagination defaultActivePage={page} totalPages={10} onPageChange={pagination} />
+      <Pagination defaultActivePage={page} totalPages={(total / perPage)} onPageChange={pagination} />
 
     </Container>
   );
