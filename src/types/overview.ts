@@ -10,7 +10,8 @@ export interface State{
 }
 export interface Data{
   subject_id: number;
-  content: string
+  content: string;
+  title: string;
 }
 export interface Overview{
   subject_id: number,
@@ -18,5 +19,5 @@ export interface Overview{
   id:number,
   created_at: string,
   updated_at: string,
-
+  title: string;
 }

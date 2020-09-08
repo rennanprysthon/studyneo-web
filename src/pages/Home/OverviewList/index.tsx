@@ -85,7 +85,7 @@ const OverviewList: React.FC = () => {
             overviews.map((overview, index) => (
               <Table.Row key={overview.id}>
                 <Table.Cell>{(index + 1)}</Table.Cell>
-                <Table.Cell>{`${overview.content.substring(0, 200 - 3)}...`}</Table.Cell>
+                <Table.Cell>{overview.title}</Table.Cell>
                 <Table.Cell>{Intl.DateTimeFormat('pt-BR').format(Date.parse(overview.created_at))}</Table.Cell>
                 <Table.Cell>{Intl.DateTimeFormat('pt-BR').format(Date.parse(overview.updated_at))}</Table.Cell>
                 <Table.Cell>

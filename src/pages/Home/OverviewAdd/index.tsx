@@ -12,7 +12,7 @@ import ReactMarkdown from 'react-markdown';
 import { useSelector, useDispatch } from 'react-redux';
 import { Creators } from '../../../redux/ducks/overview';
 import {
-  Container, Content, TextArea, Form, Button,
+  Container, Content, TextArea, Form, Button, TextInput,
 } from './styles';
 import FilterSubject from '../../../components/FilterSubject';
 import { State } from '../../../types/globalstate';
@@ -23,6 +23,7 @@ interface Props{
 }
 const OverviewAdd: React.FC<Props> = ({ match }) => {
   const [content, setContent] = useState('');
+  const [title, setTitle] = useState('');
   const history = useHistory();
   const navigateBack = () => {
     history.goBack();
@@ -54,6 +55,9 @@ const OverviewAdd: React.FC<Props> = ({ match }) => {
   const handleOnContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setContent(e.target.value);
   };
+  const handleOnTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTitle(e.target.value);
+  };
   const validateForm = () => {
     if (subject_id === 0) {
       addToast('Selecione o assunto referente ao resumo.', { appearance: 'warning', autoDismiss: true });
@@ -63,6 +67,10 @@ const OverviewAdd: React.FC<Props> = ({ match }) => {
       addToast('O conteúdo do Resumo não deve estar vazio.', { appearance: 'warning', autoDismiss: true });
       return false;
     }
+    if (title.length === 0) {
+      addToast('O titulo do Resumo não deve estar vazio.', { appearance: 'warning', autoDismiss: true });
+      return false;
+    }
     return true;
   };
   const onSubmitForm = (e: React.FormEvent<HTMLFormElement>) => {
@@ -70,10 +78,10 @@ const OverviewAdd: React.FC<Props> = ({ match }) => {
     if (validateForm()) {
       const id = match?.params.overview_id;
       if (id) {
-        dispatch(Creators.update(id, { content, subject_id }));
+        dispatch(Creators.update(id, { title, content, subject_id }));
         navigateBack();
       } else {
-        dispatch(Creators.create({ content, subject_id }));
+        dispatch(Creators.create({ title, content, subject_id }));
         setContent('');
       }
     }
@@ -83,6 +91,7 @@ const OverviewAdd: React.FC<Props> = ({ match }) => {
       const id = match?.params.overview_id;
       if (id) {
         const response = await Api.getSpecificOverview(id);
+        setTitle(response.title);
         setContent(response.content);
       }
     }
@@ -92,6 +101,8 @@ const OverviewAdd: React.FC<Props> = ({ match }) => {
     <Container>
       <Content>
         <Form onSubmit={onSubmitForm}>
+          <TextInput value={title} onChange={handleOnTitleChange} placeholder="titulo" />
+          <br />
           <TextArea value={content} onChange={handleOnContentChange} />
           <br />
           <FilterSubject />

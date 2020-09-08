@@ -59,3 +59,11 @@ export const Button = styled.button<ButtonProps>`
 
   }
 `;
+
+export const TextInput = styled.input`
+  background-color: #F0f0f0;
+  padding: 10px;
+  width: 100%;
+  border-radius: 8px;
+  font-family: 'Rubik', sans-serif;
+`;
